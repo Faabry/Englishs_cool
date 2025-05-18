@@ -8,10 +8,21 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <style>
+        html, body {
+    height: 100%;
+}
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+main {
+    flex: 1 0 auto;
+}
+
         button { margin: 10px; padding: 10px; font-size: 16px; }
         img.img-card { max-width: 400px; width: 100%; display: block; margin: 20px auto 0 auto; }
         .make-sentence { font-size: 3.2rem; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; font-weight: 500; color: #222; text-align: center; }
-
         @media screen and (max-width: 450px){
             .make-sentence {
                 font-size: 2.5rem;
@@ -19,69 +30,66 @@
         }
     </style>
 </head>
-{% include "game/navbar.html" %}
 <body style="background-color: aliceblue">
-    <div class="ms-auto d-flex align-items-center">
-                <span style="font-size: 3rem; font-weight: bold; margin-left: 0.5rem;" >
+    {% include "game/navbar.html" %}
+     <main class="container flex-grow-1" style="background-color: #e3f2fd;">
+        <div class="container" style="background-color: #e3f2fd;">
+            <div class="d-flex align-items-center mb-3">
+                <span style="font-size: 3rem; font-weight: bold;">
                     <span style="color: #000;">Learn</span> <span style="color: #ff0000;">Pics</span>
                 </span>
-</div>
-    <br>
-    <div class="container" style="background-color: #e3f2fd;">
-        <br>
-        <h1 style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">Choose a Category:</h1>
-        <br>
-        <div class="row">
-            {% for cat in categories %}
-                <div class="col-6 col-md-3 mb-2 d-flex justify-content-center align-items-center">
-    <form method="get" action="/{{ cat }}/" class="w-100">
-        <button type="submit" class="btn btn-primary w-100" style="background-color: #5079d3; margin: 0;">{{ cat|capfirst }}</button>
-    </form>
-</div>
-                {% if forloop.counter|divisibleby:4 and not forloop.last %}
-                    </div><div class="row">
-                {% endif %}
-            {% endfor %}
-            {% for i in "12345678"|slice:":8"|make_list %}
-                {% if forloop.counter > categories|length %}
-                    <div class="col-6 col-md-3 mb-2"></div>
-                {% endif %}
-            {% endfor %}
-        </div>
+            </div>
+            <h1 style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">Choose a Category:</h1>
+            <div class="row">
+                {% for cat in categories %}
+                    <div class="col-6 col-md-3 mb-2 d-flex justify-content-center align-items-center">
+                        <form method="get" action="/{{ cat }}/" class="w-100">
+                            <button type="submit" class="btn btn-primary w-100" style="background-color: #5079d3; margin: 0;">{{ cat|capfirst }}</button>
+                        </form>
+                    </div>
+                    {% if forloop.counter|divisibleby:4 and not forloop.last %}
+                        </div><div class="row">
+                    {% endif %}
+                {% endfor %}
+                {% for i in "12345678"|slice:":8"|make_list %}
+                    {% if forloop.counter > categories|length %}
+                        <div class="col-6 col-md-3 mb-2"></div>
+                    {% endif %}
+                {% endfor %}
+            </div>
 
-        {% if selected_image %}
-<div class="row mt-4 align-items-start justify-content-center align-items-center">
-    <!-- Fixed label: left on desktop, top on mobile -->
-    <div class="col-12 col-md-6 d-flex justify-content-center align-items-center order-1 order-md-1" style="min-height: 400px;">
-        <div class="make-sentence" style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; font-weight: 500; color: #222; text-align: center;">
-            Make a<br>sentence<br>with...
-        </div>
-    </div>
-    <!-- Image and name: right on desktop, bottom on mobile -->
-    <div class="col-12 col-md-6 d-flex flex-column align-items-center order-2 order-md-2">
-        <img src="{{ selected_image }}" alt="Random Image" class="img-card" style="max-width: 100%; width: 100%; border-radius: 8px;">
-        <div class="mt-3 d-flex align-items-center justify-content-center" style="font-size: 2rem; font-family: 'Georgia', serif;">
-            <span id="imageName" style="color: #366092; font-weight: bold;">{{ image_name|capfirst }}</span>
-            <button onclick="speakImageName()" class="btn btn-outline-primary btn-sm ms-2" title="Hear pronunciation">
-                <img src="{% static 'game/images/volume.png' %}" alt="Sound Icon" style="width: 22px; height: 22px;">
-            </button>
-        </div>
-    </div>
-</div>
-{% endif %}
+            {% if selected_image %}
+            <div class="row mt-4 align-items-start justify-content-center align-items-center">
+                <div class="col-12 col-md-6 d-flex justify-content-center align-items-center order-1 order-md-1" style="min-height: 400px;">
+                    <div class="make-sentence">
+                        Make a<br>sentence<br>with...
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 d-flex flex-column align-items-center order-2 order-md-2">
+                    <img src="{{ selected_image }}" alt="Random Image" class="img-card" style="max-width: 100%; width: 100%; border-radius: 8px;">
+                    <div class="mt-3 d-flex align-items-center justify-content-center" style="font-size: 2rem; font-family: 'Georgia', serif;">
+                        <span id="imageName" style="color: #366092; font-weight: bold;">{{ image_name|capfirst }}</span>
+                        <button onclick="speakImageName()" class="btn btn-outline-primary btn-sm ms-2" title="Hear pronunciation">
+                            <img src="{% static 'game/images/volume.png' %}" alt="Sound Icon" style="width: 22px; height: 22px;">
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
 
-        {% if error %}
-            <p style="color: red;">{{ error }}</p>
-        {% endif %}
-    </div>
-<script>
-function speakImageName() {
-    const name = document.getElementById('imageName').innerText;
-    const utter = new SpeechSynthesisUtterance(name);
-    utter.lang = 'en-US';
-    window.speechSynthesis.speak(utter);
-}
-</script>  
-{% include "game/footer.html" %}  
+            {% if error %}
+                <p style="color: red;">{{ error }}</p>
+            {% endif %}
+        </div>
+    </main>
+    <script>
+    function speakImageName() {
+        const name = document.getElementById('imageName').innerText;
+        const utter = new SpeechSynthesisUtterance(name);
+        utter.lang = 'en-US';
+        window.speechSynthesis.speak(utter);
+    }
+    </script>
+    {% include "game/footer.html" %}
 </body>
 </html>
