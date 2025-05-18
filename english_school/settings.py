@@ -33,7 +33,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
-    "https://learn-pics.onrender.com"
+    "https://learn-pics.onrender.com",
+    "learn-pics.onrender.com",
 ]
 
 
