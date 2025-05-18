@@ -35,6 +35,7 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "https://learn-pics.onrender.com",
     "learn-pics.onrender.com",
+    "localhost"
 ]
 
 
@@ -61,8 +62,6 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 STATICFILES_DIRS = [
     BASE_DIR / "app_learn_pics" / "static"
 ]
-
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
