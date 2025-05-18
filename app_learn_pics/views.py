@@ -3,6 +3,8 @@ import random
 from django.conf import settings
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import logout
 
 @login_required
 def category_selection(request):
@@ -28,3 +30,17 @@ def show_random_image(request, category):
         'category': category,
         'categories': ['foods', 'drinks', 'animals', 'places', 'fruits', 'objects', 'clothes', 'verbs'],
     })
+
+def signup(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = UserCreationForm()
+    return render(request, 'registration/signup.html', {'form': form})
+
+def custom_logout(request):
+    logout(request)
+    return render(request, 'registration/logged_out.html')
