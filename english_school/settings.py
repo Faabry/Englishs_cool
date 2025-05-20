@@ -38,6 +38,10 @@ ALLOWED_HOSTS = [
     "localhost"
 ]
 
+# settings.py
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'category_selection'
+LOGOUT_REDIRECT_URL = 'login'
 
 # Application definition
 

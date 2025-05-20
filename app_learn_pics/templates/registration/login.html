@@ -28,6 +28,13 @@
             max-width: 400px;
             
         }
+
+        .img_logo {
+            max-width: 25rem;
+            margin-left: auto;
+            padding-bottom: 5rem;
+        }
+
         @media (max-width: 600px) {
             .login-container {
                 width: 100%;
@@ -36,31 +43,38 @@
                 margin-right: 0;
                 border-radius: 0;
             }
+
+            .img_logo {
+                max-width: 18rem;
+                margin-left: 0;
+                padding-bottom: 2rem;
+            }
         }
     </style>
 </head>
 <body style="background-color: aliceblue;">
-    {% include "game/navbar.html" %}
+    {% include "game/navbar_loggin.html" %}
     <main class="d-flex justify-content-center align-items-center flex-grow-1">
         <div class="login-container w-100">
+            <img src="{% static 'game/images/logo lessons.png' %}" class="col-12 img-fluid img_logo">
             <form method="post">
                 {% csrf_token %}
-                <div class="mb-3 col-12 d-flex justify-content-center" style="font-size: 1.5rem;">
+                <!-- <div class="mb-3 col-12 d-flex justify-content-center" style="font-size: 1.5rem;">
                     {{ form.username.label_tag }}                    
-                </div>
+                </div> -->
                 <div class="mb-3 col-12 d-flex justify-content-center" style="font-size: 1.4rem;">                    
                     {{ form.username }}
                 </div>
-                <div class="mb-3 col-12 d-flex justify-content-center" style="font-size: 1.5rem;">
+                <!-- <div class="mb-3 col-12 d-flex justify-content-center" style="font-size: 1.5rem;">
                     {{ form.password.label_tag }}                    
-                </div>
+                </div> -->
                 <div class="d-grid gap-2 mt-4 col-8 mx-auto justify-content-center" style="font-size: 1.4rem;">                    
                     {{ form.password }}
                 </div>
                 <div class="d-grid gap-2 mt-4 col-8 mx-auto">
                     <button type="submit" class="btn btn-primary">Login</button>
                     <a href="{% url 'password_reset' %}" class="btn btn-link p-0 text-decoration-underline">Forgot Password?</a>
-                    <a href="{% url 'signup' %}" class="btn btn-success">Sign Up</a>
+                    <!-- <a href="{% url 'signup' %}" class="btn btn-success">Sign Up</a> -->
                 </div>
             </form>
             <br>
