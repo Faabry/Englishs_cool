@@ -49,3 +49,54 @@ def custom_logout(request):
 @login_required
 def profile_view(request):
     return render(request, 'user/profile.html')
+
+
+import random
+# ...existing code...
+
+@login_required
+def memory_match(request):
+    # Path to your images root
+    images_root = os.path.join(settings.BASE_DIR, 'app_learn_pics', 'static', 'game', 'images')
+    categories = [d for d in os.listdir(images_root) if os.path.isdir(os.path.join(images_root, d))]
+    image_files = []
+
+    # Collect images from each category folder
+    for category in categories:
+        category_dir = os.path.join(images_root, category)
+        for f in os.listdir(category_dir):
+            if f.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
+                image_files.append({
+                    'filename': f,
+                    'category': category
+                })
+
+    # Limit to 20 images (randomly chosen if more)
+    if len(image_files) > 20:
+        image_files = random.sample(image_files, 20)
+
+    # Prepare pairs: each image and its name
+    pairs = []
+    for img in image_files:
+        name = os.path.splitext(img['filename'])[0].replace('_', ' ').capitalize()
+        img_url = f'/static/game/images/{img["category"]}/{img["filename"]}'
+        pairs.append({'type': 'image', 'value': f'{img["category"]}/{img["filename"]}', 'display': img_url})
+        pairs.append({'type': 'word', 'value': f'{img["category"]}/{img["filename"]}', 'display': name})
+
+    # Shuffle cards
+    random.shuffle(pairs)
+
+    # Reshape into 8 rows x 5 columns (if less than 40, fill with None)
+    grid = []
+    for i in range(8):
+        row = []
+        for j in range(5):
+            idx = i * 5 + j
+            row.append(pairs[idx] if idx < len(pairs) else None)
+        grid.append(row)
+
+    return render(request, 'game/memory_match.html', {
+        'grid': grid,
+        'col_headers': ['A', 'B', 'C', 'D', 'E'],
+        'row_headers': range(1, 9),
+    })
