@@ -55,14 +55,11 @@ def profile_view(request):
     return render(request, 'user/profile.html')
 
 
-import random
-# ...existing code...
-
 @login_required
 def memory_match(request):
     # Path to your images root
     images_root = os.path.join(settings.BASE_DIR, 'app_learn_pics', 'static', 'game', 'images')
-    categories = [d for d in os.listdir(images_root) if os.path.isdir(os.path.join(images_root, d))]
+    categories = [d for d in os.listdir(images_root) if os.path.isdir(os.path.join(images_root, d)) and d != 'verbs']
     image_files = []
 
     # Collect images from each category folder
@@ -76,8 +73,8 @@ def memory_match(request):
                 })
 
     # Limit to 20 images (randomly chosen if more)
-    if len(image_files) > 20:
-        image_files = random.sample(image_files, 20)
+    if len(image_files) > 10:
+        image_files = random.sample(image_files, 10)
 
     # Prepare pairs: each image and its name
     pairs = []
@@ -92,7 +89,7 @@ def memory_match(request):
 
     # Reshape into 8 rows x 5 columns (if less than 40, fill with None)
     grid = []
-    for i in range(8):
+    for i in range(4):
         row = []
         for j in range(5):
             idx = i * 5 + j
@@ -102,5 +99,43 @@ def memory_match(request):
     return render(request, 'game/memory_match.html', {
         'grid': grid,
         'col_headers': ['A', 'B', 'C', 'D', 'E'],
-        'row_headers': range(1, 9),
+        'row_headers': range(1, 5),
     })
+    
+
+@login_required
+def slot_machine(request):
+    categories = ["places", "countries", "foods", "animals"]
+    tenses = ["present", "past", "future"]
+
+    # Example word lists (replace with your real data)
+    subjects = ["The boy", "My friend", "A dog", "The teacher"]
+    verbs = ["visit", "eat", "see", "play in"]
+    objects = {
+        "places": ["the museum", "the park", "the school"],
+        "countries": ["Brazil", "Japan", "Canada"],
+        "parks": ["Central Park", "Hyde Park", "Ibirapuera Park"],
+        "foods": ["pizza", "sushi", "ice cream"],
+        "animals": ["a cat", "an elephant", "a bird"]
+    }
+    adjectives = ["quickly", "happily", "loudly", "carefully"]
+
+    # Get random choices
+    category = random.choice(categories)
+    tense = random.choice(tenses)
+    subject = random.choice(subjects)
+    verb = random.choice(verbs)
+    obj = random.choice(objects[category])
+    adverb = random.choice(adjectives)
+
+    return render(request, 'game/slot_machine.html', {
+        'category': category,
+        'tense': tense,
+        'subject': subject,
+        'verb': verb,
+        'object': obj,
+        'adverb': adverb,
+        'categories': categories,
+        'tenses': tenses,
+    })  
+        
