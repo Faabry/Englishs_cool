@@ -1,0 +1,167 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English's Cool - Learn Pics</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <style>
+        .slot-machine {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin: 3rem 0;
+            border-radius: 2%;
+            background-color: #e3f2fd;
+            padding: 2rem 1rem;
+        }
+        .slot-column {
+            background: #e3f2fd;
+            border: 4px solid #366092;
+            border-radius: 1rem;
+            width: 160px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: bold;
+            min-width: 120px;
+            min-height: 60px;
+            box-shadow: 0 2px 8px #0002;
+        }
+        .slot-label {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #366092;
+        }
+        .spin-btn {
+            margin-top: 2rem;
+            font-size: 1.5rem;
+            padding: 0.5rem 2rem;
+        }
+    </style>
+</head>
+<body style="background-color: aliceblue;">
+    {% include "game/navbar.html" %}
+    <main class="container text-center py-5">
+    <div class="slot-wrapper mx-auto p-4">
+        <!-- Title on its own line -->
+        <div class="d-flex align-items-center justify-content-center mb-3">
+            <span style="font-size: 3rem; font-weight: bold;">
+                <span style="color: #000;">Slot</span> <span style="color: #ff0000;">Machine</span>
+            </span>
+        </div>
+        <!-- Game on its own line -->
+        <div class="slot-machine mx-auto mb-3">
+            <div>
+                <div class="slot-label">Subject</div>
+                <div class="slot-column" id="subjectSlot">---</div>
+            </div>
+            <div>
+                <div class="slot-label">Tense</div>
+                <div class="slot-column" id="tenseSlot">---</div>
+            </div>
+            <div>
+                <div class="slot-label">Verb/Object</div>
+                <div class="slot-column" id="objectSlot">---</div>
+            </div>
+        </div>
+        <!-- Button on its own line -->
+        <button class="btn btn-primary spin-btn" id="spinBtn">Spin!</button>
+        <div class="mt-4" id="sentenceResult" style="font-size:1.5rem;"></div>
+    </div>
+</main>
+<style>
+.slot-wrapper {
+    background-color: #e3f2fd;
+    border-radius: 1.5rem;
+    box-shadow: 0 2px 8px #0001;
+    max-width: 900px;
+}
+.slot-machine {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    margin: 0;
+    background: none;
+    padding: 0;
+    border-radius: 0;
+}
+.slot-column {
+    background: #e3f2fd;
+    border: 4px solid #366092;
+    border-radius: 1rem;
+    width: 160px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: bold;
+    min-width: 120px;
+    min-height: 60px;
+    box-shadow: 0 2px 8px #0002;
+}
+.slot-label {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #366092;
+}
+.spin-btn {
+    margin-top: 2rem;
+    font-size: 1.5rem;
+    padding: 0.5rem 2rem;
+}
+</style>
+    {% include "game/footer.html" %}
+    <script>
+        // Example lists (replace with Django context if you want)
+        const subjects = ["The boy", "My friend", "A dog", "The teacher"];
+        const tenses = ["present", "past", "future"];
+        const objects = ["the museum", "the park", "pizza", "Japan", "an elephant"];
+
+        function getRandom(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        const subjectSlot = document.getElementById('subjectSlot');
+        const tenseSlot = document.getElementById('tenseSlot');
+        const objectSlot = document.getElementById('objectSlot');
+        const spinBtn = document.getElementById('spinBtn');
+        const sentenceResult = document.getElementById('sentenceResult');
+
+        function animateSlot(slot, values, duration = 1000) {
+            return new Promise(resolve => {
+                let i = 0;
+                const interval = setInterval(() => {
+                    slot.textContent = values[i % values.length];
+                    i++;
+                }, 60);
+                setTimeout(() => {
+                    clearInterval(interval);
+                    const finalValue = getRandom(values);
+                    slot.textContent = finalValue;
+                    resolve(finalValue);
+                }, duration);
+            });
+        }
+
+        spinBtn.onclick = async function() {
+            sentenceResult.textContent = '';
+            spinBtn.disabled = true;
+            const subject = await animateSlot(subjectSlot, subjects, 1200);
+            const tense = await animateSlot(tenseSlot, tenses, 1500);
+            const object = await animateSlot(objectSlot, objects, 1800);
+            sentenceResult.innerHTML = `<b>Your challenge:</b> Make a <b>${tense}</b> tense sentence with: <br><span style="font-size:1em">${subject} ... ${object}</span>`;
+            spinBtn.disabled = false;
+        };
+    </script>
+</body>
+</html>
