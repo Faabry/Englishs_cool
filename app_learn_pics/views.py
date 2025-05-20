@@ -7,6 +7,10 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import logout
 
 @login_required
+def home(request):
+    return render(request, 'game/home.html')
+
+@login_required
 def category_selection(request):
     categories = ['foods', 'drinks', 'animals', 'places', 'fruits', 'objects', 'clothes', 'verbs']
     return render(request, 'game/category.html', {'categories': categories, 'current_page': 'games',})
