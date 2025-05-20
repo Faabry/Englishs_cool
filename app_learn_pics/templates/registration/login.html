@@ -30,10 +30,12 @@
         }
 
         .img_logo {
-            max-width: 25rem;
-            margin-left: auto;
-            padding-bottom: 5rem;
-        }
+    max-width: 25rem;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    padding-bottom: 5rem;
+}
 
         @media (max-width: 600px) {
             .login-container {
@@ -45,15 +47,17 @@
             }
 
             .img_logo {
-                max-width: 18rem;
-                margin-left: 0;
-                padding-bottom: 2rem;
-            }
+        max-width: 18rem;
+        padding-bottom: 2rem;
+        /* Keep auto margins for centering */
+        margin-left: auto;
+        margin-right: auto;
+    }
         }
     </style>
 </head>
 <body style="background-color: aliceblue;">
-    {% include "game/navbar_loggin.html" %}
+    
     <main class="d-flex justify-content-center align-items-center flex-grow-1">
         <div class="login-container w-100">
             <img src="{% static 'game/images/logo lessons.png' %}" class="col-12 img-fluid img_logo">
@@ -80,6 +84,6 @@
             <br>
         </div>
     </main>
-    {% include "game/footer.html" %}
+    <!-- {% include "game/footer.html" %} -->
 </body>
 </html>
