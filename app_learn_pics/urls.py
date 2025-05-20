@@ -5,6 +5,7 @@ from . import views
 urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls), 
+    path('', views.category_selection, name='home'),  # <-- Add this line
     path('learn-pics', views.category_selection, name='category_selection'),
     path('profile/', views.profile_view, name='profile'),
     path('memory-match/', views.memory_match, name='memory_match'),
