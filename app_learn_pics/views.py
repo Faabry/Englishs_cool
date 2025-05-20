@@ -44,3 +44,8 @@ def signup(request):
 def custom_logout(request):
     logout(request)
     return render(request, 'registration/logged_out.html')
+
+
+@login_required
+def profile_view(request):
+    return render(request, 'user/profile.html')
