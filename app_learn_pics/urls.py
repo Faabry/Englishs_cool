@@ -9,7 +9,7 @@ urlpatterns = [
     path('learn-pics', views.category_selection, name='category_selection'),
     path('profile/', views.profile_view, name='profile'),
     path('memory-match/', views.memory_match, name='memory_match'),
-    path('slot-machine/', views.slot_machine, name='sentence_spinner'),
+    path('slot-machine/', views.slot_machine, name='slot_machine'),
     path('<str:category>/', views.show_random_image, name='show_image'),
     path('accounts/signup/', views.signup, name='signup'),
     
