@@ -139,3 +139,53 @@ def slot_machine(request):
         'tenses': tenses,
     })  
         
+@login_required
+def word_battleship(request):
+    size = 10
+    all_words = [
+        'cat', 'dog', 'apple', 'banana', 'car', 'house', 'tree', 'book', 'fish', 'star',
+        'moon', 'sun', 'plane', 'train', 'phone', 'mouse', 'chair', 'table', 'shirt', 'shoe'
+    ]
+    words = random.sample(all_words, 10)
+    grid = [[{'letter': None, 'word': None} for _ in range(size)] for _ in range(size)]
+    for word in words:
+        placed = False
+        attempts = 0
+        while not placed and attempts < 100:
+            direction = random.choice(['horizontal', 'vertical'])
+            # ...inside your placement loop...
+            if direction == 'horizontal':
+                row = random.randint(0, size-1)
+                col = random.randint(0, size-len(word))
+                before_ok = (col == 0) or (grid[row][col-1]['letter'] is None)
+                after_ok = (col+len(word) == size) or (grid[row][col+len(word)]['letter'] is None)
+                # Allow overlap only if the letter matches
+                cells_ok = all(
+                    grid[row][col+i]['letter'] is None or grid[row][col+i]['letter'] == letter
+                    for i, letter in enumerate(word)
+                )
+                if before_ok and after_ok and cells_ok:
+                    for i, letter in enumerate(word):
+                        grid[row][col+i]['letter'] = letter
+                        grid[row][col+i]['word'] = word
+                    placed = True
+            else:  # vertical
+                row = random.randint(0, size-len(word))
+                col = random.randint(0, size-1)
+                before_ok = (row == 0) or (grid[row-1][col]['letter'] is None)
+                after_ok = (row+len(word) == size) or (grid[row+len(word)][col]['letter'] is None)
+                cells_ok = all(
+                    grid[row+i][col]['letter'] is None or grid[row+i][col]['letter'] == letter
+                    for i, letter in enumerate(word)
+                )
+                if before_ok and after_ok and cells_ok:
+                    for i, letter in enumerate(word):
+                        grid[row+i][col]['letter'] = letter
+                        grid[row+i][col]['word'] = word
+                    placed = True
+            attempts += 1
+    col_headers = [chr(65+i) for i in range(size)]
+    return render(request, 'game/word_battleship.html', {
+        'grid': grid,
+        'col_headers': col_headers,
+    })
