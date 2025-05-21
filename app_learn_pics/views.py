@@ -155,9 +155,15 @@ def slot_machine(request):
 def word_battleship(request):
     size = 10
     all_words = [
-        'cat', 'dog', 'apple', 'banana', 'car', 'house', 'tree', 'book', 'fish', 'star',
-        'moon', 'sun', 'plane', 'train', 'phone', 'mouse', 'chair', 'table', 'shirt', 'shoe'
-    ]
+    'cat', 'dog', 'apple', 'banana', 'car', 'house', 'tree', 'book', 'fish', 'star',
+    'moon', 'sun', 'plane', 'train', 'phone', 'mouse', 'chair', 'table', 'shirt', 'shoe',
+    'boat', 'cup', 'door', 'pen', 'pencil', 'bag', 'clock', 'lamp', 'hat', 'sock',
+    'bed', 'truck', 'bike', 'bus', 'glass', 'key', 'ring', 'fork', 'spoon', 'plate',
+    'ball', 'bat', 'drum', 'flag', 'frog', 'lion', 'tiger', 'bear', 'snake', 'whale',
+    'ship', 'map', 'coin', 'box', 'robot', 'plane', 'candle', 'radio', 'brush', 'leaf'
+]
+
+    random.shuffle(all_words)
     words = random.sample(all_words, 10)
     grid = [[{'letter': None, 'word': None} for _ in range(size)] for _ in range(size)]
     for word in words:
