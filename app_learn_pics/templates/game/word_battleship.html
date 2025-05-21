@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English's Cool - Word Battleship</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <style>
+        html, body { height: 100%; }
+        body { min-height: 100vh; display: flex; flex-direction: column; }
+        main { flex: 1 0 auto; }
+        table.battleship-table {
+            margin: auto;
+            background: #366092;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px #0001;
+        }
+        table.battleship-table th, table.battleship-table td {
+            text-align: center;
+            vertical-align: middle;
+            width: 38px;
+            height: 38px;
+            padding: 0;
+        }
+        .battleship-cell {
+            width: 100%;
+            height: 100%;
+            background: #e3f2fd;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+            transition: background 0.2s;
+        }
+        .battleship-cell.hit { background: #ffcccc; }
+        .battleship-cell.miss { background: #d0eaff; }
+        .battleship-cell.word { background: #c8e6c9; }
+        @media (max-width: 600px) {
+            table.battleship-table th, table.battleship-table td { width: 24px; height: 24px; }
+            .battleship-cell { font-size: 0.7rem; }
+        }
+    </style>
+</head>
+<body style="background-color: aliceblue">
+    {% include "game/navbar.html" %}
+    <main class="container flex-grow-1" style="background-color: #e3f2fd;">
+        <div class="container" style="background-color: #e3f2fd;">
+            <div class="d-flex align-items-center mb-3">
+                <span style="font-size: 2.2rem; font-weight: bold;">
+                    <span style="color: #000;">Word</span> <span style="color: #ff0000;">Battleship</span>
+                </span>
+            </div>
+            <h1 style="font-size: 1.2rem;">Click on the cells to find all the hidden words!</h1>
+            <table class="battleship-table table-bordered">
+                <thead>
+                    <tr>
+                        <th></th>
+                        {% for col in col_headers %}
+                            <th style="color: #e3f2fd;">{{ col }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in grid %}
+                    <tr>
+                        <th style="color: #e3f2fd;">{{ forloop.counter }}</th>
+                        {% for cell in row %}
+                        <td>
+                            <div class="battleship-cell" data-letter="{{ cell.letter|default_if_none:'' }}">
+                                <!-- Optionally show something if revealed -->
+                            </div>
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <script>
+            // JS for clicking cells
+            document.querySelectorAll('.battleship-cell').forEach(cell => {
+                cell.addEventListener('click', function() {
+                    if (this.classList.contains('hit') || this.classList.contains('miss')) return;
+                    if (this.dataset.letter) {
+                    this.classList.add('hit', 'word');
+                    this.innerHTML = `<span style="font-weight:bold;">${this.dataset.letter}</span>`;
+                } else {
+                    this.classList.add('miss');
+                    this.innerHTML = '<span style="color:#366092;">&#10006;</span>';
+                }
+                });
+            });
+        </script>
+    </main>
+    {% include "game/footer.html" %}
+</body>
+</html>
