@@ -25,6 +25,39 @@ table.memory-table {
             border-radius: 8px;
             box-shadow: 0 2px 8px #0001;
         }
+        /* Make only the table headers thinner */
+table.memory-table th {
+    width: 32px !important;
+    min-width: 32px !important;
+    max-width: 32px !important;
+    height: 32px !important;
+    min-height: 32px !important;
+    max-height: 32px !important;
+    font-size: 0.9rem;
+    padding: 0;
+    background: #366092;
+    color: #e3f2fd;
+}
+table.memory-table th:first-child {
+    width: 32px !important;
+    min-width: 32px !important;
+    max-width: 32px !important;
+    height: 32px !important;
+    min-height: 32px !important;
+    max-height: 32px !important;
+    font-size: 0.9rem;
+    padding: 0;
+}
+table.memory-table thead th {
+    width: 32px !important;
+    min-width: 32px !important;
+    max-width: 32px !important;
+    height: 32px !important;
+    min-height: 32px !important;
+    max-height: 32px !important;
+    font-size: 0.9rem;
+    padding: 0;
+}
         table.memory-table th, table.memory-table td {
             text-align: center;
             vertical-align: middle;
@@ -84,8 +117,8 @@ main {
 
         @media (max-width: 600px) {
     table.memory-table th, table.memory-table td {
-        width: 48px;
-        height: 48px;
+        width: 60px;
+        height: 60px;
         padding: 0;
     }
     .memory-card {
@@ -98,8 +131,8 @@ main {
 }
 @media (max-width: 400px) {
     table.memory-table th, table.memory-table td {
-        width: 32px;
-        height: 32px;
+        width: 55px;
+        height: 60px;
     }
     .memory-card {
         font-size: 0.5rem;
@@ -127,28 +160,32 @@ main {
         </tr>
     </thead>
     <tbody>
-        {% for row in grid %}
-        <tr>
-            <th style="color: #e3f2fd;">{{ forloop.counter }}</th>
-            {% for card in row %}
-                <td>
-                    {% if card %}
-                    <div class="memory-card" data-type="{{ card.type }}" data-value="{{ card.value }}">
-                        <div class="cover"></div>
-                        <div class="hidden-content">
-                            {% if card.type == 'image' %}
-                                <img src="{{ card.display }}" alt="card" style="width: 95%; height: 95%; object-fit: contain; display: block; margin: auto;">
-                            {% else %}
-                                <span>{{ card.display }}</span>
-                            {% endif %}
-                        </div>
+    {% for row in grid %}
+<tr>
+    <th>{{ forloop.counter }}</th>
+    {% for card in row %}
+        {% if forloop.parentloop.counter0 == center_row and forloop.counter0 == center_col %}
+            <td class="center-block" style="background:#366092; color:#e3f2fd;"></td>
+        {% elif card %}
+            <td>
+                <div class="memory-card" data-type="{{ card.type }}" data-value="{{ card.value }}">
+                    <div class="cover"></div>
+                    <div class="hidden-content">
+                        {% if card.type == 'image' %}
+                            <img src="{{ card.display }}" alt="card" style="width: 95%; height: 95%; object-fit: contain; display: block; margin: auto;">
+                        {% else %}
+                            <span>{{ card.display }}</span>
+                        {% endif %}
                     </div>
-                    {% endif %}
-                </td>
-            {% endfor %}
-        </tr>
-        {% endfor %}
-    </tbody>
+                </div>
+            </td>
+        {% else %}
+            <td></td>
+        {% endif %}
+    {% endfor %}
+</tr>
+{% endfor %}
+</tbody>
 </table>
     </div>
     <script>
