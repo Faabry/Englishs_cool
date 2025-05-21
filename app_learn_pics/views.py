@@ -73,8 +73,8 @@ def memory_match(request):
                 })
 
     # Limit to 20 images (randomly chosen if more)
-    if len(image_files) > 10:
-        image_files = random.sample(image_files, 10)
+    if len(image_files) > 12:
+        image_files = random.sample(image_files, 12)
 
     # Prepare pairs: each image and its name
     pairs = []
@@ -89,17 +89,29 @@ def memory_match(request):
 
     # Reshape into 8 rows x 5 columns (if less than 40, fill with None)
     grid = []
-    for i in range(4):
+    for i in range(5):
         row = []
         for j in range(5):
-            idx = i * 5 + j
-            row.append(pairs[idx] if idx < len(pairs) else None)
+            if i == 2 and j == 2:  # center cell
+                row.append(None)
+            else:
+                idx = i * 5 + j
+                # Adjust idx to skip the center cell
+                idx_in_pairs = i * 5 + j
+                if idx_in_pairs > 2 * 5 + 2:  # after center cell
+                    idx -= 1
+                row.append(pairs[idx] if idx < len(pairs) else None)
         grid.append(row)
-
+    # Example for a 5x5 grid
+    col_headers = [chr(65 + i) for i in range(len(grid[0]))]  # <-- Add this line
+    center_row = len(grid) // 2
+    center_col = len(grid[0]) // 2
     return render(request, 'game/memory_match.html', {
         'grid': grid,
-        'col_headers': ['A', 'B', 'C', 'D', 'E'],
-        'row_headers': range(1, 5),
+        'col_headers': col_headers,
+        'center_row': center_row,
+        'center_col': center_col,
+        # ...other context...
     })
     
 
