@@ -11,6 +11,7 @@ urlpatterns = [
     path('memory-match/', views.memory_match, name='memory_match'),
     path('slot-machine/', views.slot_machine, name='slot_machine'),
     path('word-battleship/', views.word_battleship, name='word_battleship'),
+    path('hangman/', views.hangman, name='hangman'),
     path('<str:category>/', views.show_random_image, name='show_image'),
     path('accounts/signup/', views.signup, name='signup'),
     
