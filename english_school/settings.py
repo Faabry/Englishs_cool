@@ -39,7 +39,7 @@ ALLOWED_HOSTS = [
 ]
 
 # settings.py
-LOGIN_URL = 'login'
+LOGIN_URL = 'home'
 LOGIN_REDIRECT_URL = 'category_selection'
 LOGOUT_REDIRECT_URL = 'login'
 

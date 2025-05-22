@@ -6,16 +6,16 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import logout
 
-@login_required
+# @login_required
 def home(request):
     return render(request, 'game/home.html')
 
-@login_required
+# @login_required
 def category_selection(request):
     categories = ['foods', 'drinks', 'animals', 'places', 'fruits', 'objects', 'clothes', 'verbs']
     return render(request, 'game/category.html', {'categories': categories, 'current_page': 'games',})
 
-@login_required
+# @login_required
 def show_random_image(request, category):
     static_dir = os.path.join(settings.STATICFILES_DIRS[0], 'game', 'images', category)
     if not os.path.exists(static_dir):
@@ -50,12 +50,12 @@ def custom_logout(request):
     return render(request, 'registration/logged_out.html')
 
 
-@login_required
+# @login_required
 def profile_view(request):
     return render(request, 'user/profile.html')
 
 
-@login_required
+# @login_required
 def memory_match(request):
     # Path to your images root
     images_root = os.path.join(settings.BASE_DIR, 'app_learn_pics', 'static', 'game', 'images')
@@ -115,7 +115,7 @@ def memory_match(request):
     })
     
 
-@login_required
+# @login_required
 def slot_machine(request):
     categories = ["places", "countries", "foods", "animals"]
     tenses = ["present", "past", "future"]
@@ -151,7 +151,7 @@ def slot_machine(request):
         'tenses': tenses,
     })  
         
-@login_required
+# @login_required
 def word_battleship(request):
     size = 10
     all_words = [
@@ -206,4 +206,117 @@ def word_battleship(request):
     return render(request, 'game/word_battleship.html', {
         'grid': grid,
         'col_headers': col_headers,
+    })
+
+
+def hangman(request):
+    import random  # Ensure random is imported
+
+    categories = {
+    "Fruit": [
+        "banana", "apple", "orange", "grape", "mango", "pineapple", "strawberry", 
+        "blueberry", "watermelon", "peach", "pear", "kiwi", "papaya", "coconut", "lemon"
+    ],
+    "Animal": [
+        "elephant", "tiger", "giraffe", "monkey", "kangaroo", "alligator", "zebra", 
+        "dolphin", "penguin", "rhinoceros", "hippopotamus", "lion", "panda", "eagle", "octopus"
+    ],
+    "Object": [
+        "pencil", "laptop", "bottle", "window", "chair", "backpack", "microwave", 
+        "television", "keyboard", "headphones", "camera", "hammer", "notebook", "wallet", "umbrella"
+    ],
+    "Country": [
+        "brazil", "canada", "france", "germany", "australia", "japan", "egypt", "spain", 
+        "italy", "india", "china", "argentina", "mexico", "norway", "sweden"
+    ],
+    "Color": [
+        "red", "blue", "green", "yellow", "purple", "orange", "black", "white", 
+        "pink", "brown", "gray", "turquoise", "gold", "silver", "beige"
+    ],
+    "Sport": [
+        "soccer", "basketball", "tennis", "baseball", "volleyball", "golf", 
+        "cricket", "rugby", "hockey", "boxing", "swimming", "cycling", "skiing", "surfing", "wrestling"
+    ],
+    "Profession": [
+        "doctor", "teacher", "engineer", "chef", "lawyer", "nurse", "architect", 
+        "scientist", "firefighter", "pilot", "police", "artist", "musician", "farmer", "writer"
+    ],
+    "Food": [
+        "pizza", "hamburger", "spaghetti", "sushi", "sandwich", "pancake", "salad", 
+        "steak", "taco", "burrito", "noodles", "cheesecake", "omelette", "curry", "lasagna"
+    ],
+    "Vehicle": [
+        "car", "motorcycle", "bicycle", "airplane", "helicopter", "boat", "train", 
+        "submarine", "truck", "scooter", "tram", "bus", "van", "ship", "jet"
+    ],
+    "Body Part": [
+        "head", "shoulder", "knee", "ankle", "elbow", "wrist", "finger", 
+        "toe", "eye", "nose", "mouth", "ear", "neck", "back", "stomach"
+    ]
+}
+
+
+    # Initialize or restart game
+    # GOOD: Only start a new game if there is no word, or "Play Again" is clicked
+    if request.method == "GET" and (request.GET.get('new') or 
+        'hangman_word' not in request.session):
+    # ... start new game ...:
+        
+        category, words = random.choice(list(categories.items()))
+        secret_word = random.choice(words).lower()
+        request.session['hangman_word'] = secret_word
+        request.session['hangman_category'] = category
+        request.session['hangman_guesses'] = []
+        request.session['hangman_lives'] = 6
+        request.session['hangman_game_over'] = False  # Reset game over
+
+    secret_word = request.session['hangman_word']
+    category = request.session['hangman_category']
+    guesses = request.session['hangman_guesses']
+    lives = request.session['hangman_lives']
+    game_over = request.session.get('hangman_game_over', False)
+
+    message = ""
+    won = False
+
+    # Handle guess
+    if request.method == "POST" and not game_over:
+        guess = request.POST.get('guess', '').lower()
+        if guess and guess not in guesses and guess.isalpha() and len(guess) == 1:
+            guesses.append(guess)
+            request.session['hangman_guesses'] = guesses
+            if guess not in secret_word:
+                lives -= 1
+                request.session['hangman_lives'] = lives
+                if lives == 0:
+                    message = f"You lost! The word was '{secret_word}'."
+                    game_over = True
+                    request.session['hangman_game_over'] = True
+            else:
+                # Check win
+                if all(letter in guesses for letter in secret_word):
+                    message = "Congratulations! You won!"
+                    won = True
+                    game_over = True
+                    request.session['hangman_game_over'] = True
+        else:
+            message = "Please enter a new, valid letter."
+
+    # Build display word
+    display_word = ' '.join([letter if letter in guesses else '_' for letter in secret_word])
+
+    if not game_over and all(letter in guesses for letter in secret_word):
+        message = "Congratulations! You won!"
+        won = True
+        game_over = True
+        request.session['hangman_game_over'] = True
+
+    return render(request, 'game/hangman.html', {
+        'category': category,
+        'display_word': display_word,
+        'guesses': guesses,
+        'lives': lives,
+        'message': message,
+        'game_over': game_over,
+        'won': won,
     })
