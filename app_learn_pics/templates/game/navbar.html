@@ -12,56 +12,47 @@
 .navbar-toggler .navbar-toggler-icon {
     background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%28255,255,255,1%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
 }
-    /* .logo-toggler {
-        max-width: 3.5rem;
+    .img-logo {
+        max-width: 6rem;
     }
 
-  @media (max-width: 991.98px) {
-    .navbar-toggler {
-      display: none;
-      max-width: 3rem !important;
-    }
-    .logo-toggler {
-      display: block !important;
-      border: none;
-      background: transparent;
-      padding: 0;
-      max-width: 4rem !important;
+  @media (max-width: 991.98px) {    
+    .img-logo {      
+      max-width: 5rem !important;
     }
   }
   @media (min-width: 992px) {
-    .logo-toggler {
-      display: none !important;  
-      max-width: 3.5rem;    
+    .img-logo {      
+      max-width: 6rem;    
     }
   }
   
   @media (max-width: 450px) {
-  .logo-toggler img {
+  .img-logo img {
     max-width: 4rem !important;
   }
 }
   @media (max-width: 700px) {
-  .logo-toggler img {
+  .img-logo img {
     max-width: 4rem !important;
   }
 }
   @media (max-width: 900px) {
-  .logo-toggler img {
+  .img-logo img {
     max-width: 5rem !important;
   }
-} --> */
+}
 </style>
 
 <nav class="navbar navbar-expand-lg mb-3 sticky-top" style="background-color: #366092;">
   <div class="container-fluid" style="background-color: #366092;">
     <!-- Logo as toggler on mobile -->
-    <!-- <button class="logo-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <!-- <button class="img-logo d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <img src="{% static 'game/images/logo.png' %}" alt="Logo">
     </button> -->
     <!-- Logo on desktop -->
     <a class="navbar-brand" href="#">
-  <img src="{% static 'game/images/logo.png' %}" class="img-fluid" style="max-width: 6rem;">
+  <img src="{% static 'game/images/logo.png' %}" class="img-fluid img-logo">
 </a>
     <!-- Navbar toggler (hidden on mobile, visible on desktop) -->
     <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
