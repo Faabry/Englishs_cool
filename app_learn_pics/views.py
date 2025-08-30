@@ -320,3 +320,19 @@ def hangman(request):
         'game_over': game_over,
         'won': won,
     })
+
+# @login_required
+def lesson_view(request, lesson_number):
+    # Build static URL for the PDF
+    pdf_url = f'/static/lessons/{lesson_number}.pdf'
+    return render(request, 'lessons/lesson_view.html', {
+        'lesson_number': lesson_number,
+        'pdf_url': pdf_url,
+    })
+
+
+def lessons_list(request):
+    lessons_dir = os.path.join(settings.STATICFILES_DIRS[0], 'lessons')
+    lesson_files = [f for f in os.listdir(lessons_dir) if f.endswith('.pdf')]
+    lessons = sorted([os.path.splitext(f)[0] for f in lesson_files], key=lambda x: int(x))
+    return {'lessons': lessons}

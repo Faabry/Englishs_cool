@@ -64,16 +64,18 @@
         <li class="nav-item">
           <a class="nav-link active" href="{% url 'home' %}" style="color: #f8f9fa;">Home</a>
         </li>
-        <!-- <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: aliceblue;">Lessons</a>
-          <ul class="dropdown-menu" style="max-height: 200px; overflow-y: auto;">
-            <li><a class="dropdown-item" href="index.html">Lesson 1</a></li>
-            <li><a class="dropdown-item" href="#">Lesson 2</a></li>
-          </ul>
-        </li> -->
-        <!-- <li class="nav-item">
-          <a class="nav-link active" aria-current="page" style="color: #f8f9fa;">Homework</a>
-        </li> -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle {% if current_page == 'lessons' %}active{% endif %}" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: aliceblue;">
+            Lessons
+          </a>
+          <ul class="dropdown-menu">
+          {% for lesson in lessons %}
+            <li>
+              <a class="dropdown-item" href="{% url 'lesson_view' lesson_number=lesson %}">Lesson {{ lesson }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+        </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle {% if current_page == 'games' %}active{% endif %}" 
              role="button" data-bs-toggle="dropdown" aria-expanded="false" 

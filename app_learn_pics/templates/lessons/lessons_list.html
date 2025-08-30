@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2>Lessons</h2>
+    <ul>
+        {% for lesson in lessons %}
+        <li>
+            <a href="{% url 'lesson_view' lesson_number=lesson %}">Lesson {{ lesson }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
