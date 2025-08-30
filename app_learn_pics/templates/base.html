@@ -26,7 +26,15 @@
 </head>
 <body>
     {% include "game/navbar.html" %}
-
+    <script>
+    document.querySelectorAll('.dropdown-menu .dropdown-item').forEach(function(item) {
+    item.addEventListener('click', function() {
+        // Close the dropdown (Bootstrap 5)
+        var dropdown = bootstrap.Dropdown.getOrCreateInstance(item.closest('.dropdown-menu'));
+        dropdown.hide();
+    });
+    });
+    </script>
     <div class="container my-4 main-content">
     {% block content %}
     {% endblock %}
@@ -36,5 +44,16 @@
 
     <!-- Bootstrap 5 JS Bundle (includes Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    document.querySelectorAll('.dropdown-menu .dropdown-item').forEach(function(item) {
+    item.addEventListener('click', function() {
+        // Find the parent dropdown toggle
+        var dropdownToggle = item.closest('.dropdown').querySelector('[data-bs-toggle="dropdown"]');
+        if (dropdownToggle) {
+        bootstrap.Dropdown.getOrCreateInstance(dropdownToggle).hide();
+        }
+    });
+    });
+    </script>
 </body>
 </html>
