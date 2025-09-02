@@ -39,7 +39,8 @@ ALLOWED_HOSTS = [
 ]
 
 # settings.py
-LOGIN_URL = 'home'
+# LOGIN_URL = 'home'
+LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = 'category_selection'
 LOGOUT_REDIRECT_URL = 'login'
 
@@ -150,3 +151,12 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'airtonfabre95@gmail.com'
+EMAIL_HOST_PASSWORD = 'vgqy yser lftg iruv'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+BASE_URL = 'https://learn-pics.onrender.com'
