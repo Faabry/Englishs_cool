@@ -16,6 +16,6 @@ urlpatterns = [
     path('accounts/signup/', views.signup, name='signup'),
     path('lessons/', views.lessons_list, name='lessons_list'),
     path('lessons/<int:lesson_number>/', views.lesson_view, name='lesson_view'),
-    
+    path('lessons/<int:lesson_number>/submit/', views.submit_lesson, name='submit_lesson'),
     # path('accounts/logout/', views.custom_logout, name='logout'),  # <-- Use /accounts/logout/ and place it AFTER the include
 ]
