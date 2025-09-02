@@ -65,17 +65,109 @@
           <a class="nav-link active" href="{% url 'home' %}" style="color: #f8f9fa;">Home</a>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle {% if current_page == 'lessons' %}active{% endif %}" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: aliceblue;">
+          <a class="nav-link dropdown-toggle {% if current_page == 'lessons' %}active{% endif %}"
+            role="button" data-bs-toggle="dropdown" aria-expanded="false"
+            style="color: aliceblue;">
             Lessons
           </a>
-          <ul class="dropdown-menu">
-          {% for lesson in lessons %}
+          <ul class="dropdown-menu p-2" style="min-width: 240px;" data-bs-auto-close="outside">
+            <!-- Search box + Go button -->
             <li>
-              <a class="dropdown-item" href="{% url 'lesson_view' lesson_number=lesson %}">Lesson {{ lesson }}</a>
+              <div class="input-group mb-2">
+                <input type="text" class="form-control" id="lessonSearch" placeholder="Search lesson...">                  
+                <button class="btn btn-success" id="lessonSearchBtn" type="button">Go</button>
+              </div>
             </li>
-          {% endfor %}
-        </ul>
+            <!-- Scrollable lessons list -->
+            <li>
+              <ul id="lessonList" class="list-unstyled mb-0" style="max-height: 160px; overflow-y: auto;">
+                {% for lesson in lessons %}
+                <li>
+                  <a class="dropdown-item" href="{% url 'lesson_view' lesson_number=lesson %}">
+                    Lesson {{ lesson }}
+                  </a>
+                </li>
+                {% endfor %}
+                <li id="noResults" class="dropdown-item text-muted d-none">No results</li>
+              </ul>
+            </li>
+          </ul>
         </li>
+    <!-- Hidden template link so JS can build the correct URL -->
+    <a id="lessonHrefTemplate" href="{% url 'lesson_view' lesson_number=0 %}" class="d-none"></a>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const searchInput = document.getElementById("lessonSearch");
+      const searchBtn   = document.getElementById("lessonSearchBtn");
+      const lessonList  = document.getElementById("lessonList");
+      const templateEl  = document.getElementById("lessonHrefTemplate");
+      const items       = lessonList.querySelectorAll("li > a.dropdown-item");
+      const noResults   = document.getElementById("noResults");
+
+      function filterList() {
+        const q = (searchInput.value || "").toLowerCase().trim();
+        let visible = 0;
+
+        items.forEach(a => {
+          const text = (a.textContent || a.innerText).toLowerCase();
+          const match = text.indexOf(q) > -1;
+          a.parentElement.style.display = match ? "" : "none";
+          if (match) visible++;
+        });
+
+        // Show/hide "No results"
+        if (noResults) {
+          noResults.classList.toggle("d-none", visible !== 0);
+          noResults.style.display = visible === 0 ? "" : "none";
+        }
+      }
+
+      function navigateToFirstVisible() {
+        // If user typed a number (or "lesson 63"), prefer that number
+        const raw = (searchInput.value || "").trim();
+        const numMatch = raw.match(/\d+/); // grabs "63" from "lesson 63"
+        const fromNumber = numMatch ? parseInt(numMatch[0], 10) : null;
+
+        let targetHref = null;
+
+        if (fromNumber !== null && !Number.isNaN(fromNumber)) {
+          // Build URL from template href by swapping the trailing number
+          const templateHref = templateEl.getAttribute("href"); // e.g., ".../0/"
+          // Replace the last "/<digits>/" (with optional trailing slash) with the desired number
+          targetHref = templateHref.replace(/\/\d+\/?$/, "/" + fromNumber + "/");
+        } else {
+          // No number typed: go to the first visible filtered item
+          for (const a of items) {
+            if (a.parentElement.style.display !== "none") {
+              targetHref = a.href;
+              break;
+            }
+          }
+        }
+
+        if (targetHref) {
+          window.location.href = targetHref;
+        }
+      }
+
+      // Live filtering
+      searchInput.addEventListener("input", filterList);
+
+      // Enter key navigates
+      searchInput.addEventListener("keydown", function(e) {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          navigateToFirstVisible();
+        }
+      });
+
+      // Go button navigates
+      searchBtn.addEventListener("click", navigateToFirstVisible);
+    });
+    </script>
+
+
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle {% if current_page == 'games' %}active{% endif %}" 
              role="button" data-bs-toggle="dropdown" aria-expanded="false" 

@@ -5,17 +5,21 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import logout
+from django.core.mail import send_mail
+from django.shortcuts import redirect
+from django.contrib import messages
+from django.core.mail import EmailMessage
 
-# @login_required
+@login_required
 def home(request):
     return render(request, 'game/home.html')
 
-# @login_required
+@login_required
 def category_selection(request):
     categories = ['foods', 'drinks', 'animals', 'places', 'fruits', 'objects', 'clothes', 'verbs']
     return render(request, 'game/category.html', {'categories': categories, 'current_page': 'games',})
 
-# @login_required
+@login_required
 def show_random_image(request, category):
     static_dir = os.path.join(settings.STATICFILES_DIRS[0], 'game', 'images', category)
     if not os.path.exists(static_dir):
@@ -50,12 +54,12 @@ def custom_logout(request):
     return render(request, 'registration/logged_out.html')
 
 
-# @login_required
+@login_required
 def profile_view(request):
     return render(request, 'user/profile.html')
 
 
-# @login_required
+@login_required
 def memory_match(request):
     # Path to your images root
     images_root = os.path.join(settings.BASE_DIR, 'app_learn_pics', 'static', 'game', 'images')
@@ -115,7 +119,7 @@ def memory_match(request):
     })
     
 
-# @login_required
+@login_required
 def slot_machine(request):
     categories = ["places", "countries", "foods", "animals"]
     tenses = ["present", "past", "future"]
@@ -151,7 +155,7 @@ def slot_machine(request):
         'tenses': tenses,
     })  
         
-# @login_required
+@login_required
 def word_battleship(request):
     size = 10
     all_words = [
@@ -321,7 +325,7 @@ def hangman(request):
         'won': won,
     })
 
-# @login_required
+@login_required
 def lesson_view(request, lesson_number):
     # Build static URL for the PDF
     pdf_url = f'/static/lessons/{lesson_number}.pdf'
@@ -336,3 +340,20 @@ def lessons_list(request):
     lesson_files = [f for f in os.listdir(lessons_dir) if f.endswith('.pdf')]
     lessons = sorted([os.path.splitext(f)[0] for f in lesson_files], key=lambda x: int(x))
     return {'lessons': lessons}
+
+
+@login_required
+def submit_lesson(request, lesson_number):
+    if request.method == 'POST' and request.FILES.get('edited_pdf'):
+        edited_pdf = request.FILES['edited_pdf']
+        email = EmailMessage(
+            subject=f"Lesson {lesson_number} submitted for correction",
+            body=f"The user {request.user.username} has submitted lesson {lesson_number} for correction.\nSend it back to {request.user.email}",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=['airtonfabre95@gmail.com'],  # <-- your real email
+        )
+        email.attach(edited_pdf.name, edited_pdf.read(), 'application/pdf')
+        email.send()
+        messages.success(request, "Your edited lesson has been submitted for correction!")
+        return redirect('lesson_view', lesson_number=lesson_number)
+    return redirect('lesson_view', lesson_number=lesson_number) 
