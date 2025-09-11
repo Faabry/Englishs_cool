@@ -36,7 +36,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
-    "https://learn-pics.onrender.com",
+    "https://englishs-cool.onrender.com",
     "englishs-cool.onrender.com",
     "localhost"
 ]
@@ -59,11 +59,6 @@ INSTALLED_APPS = [
     'app_learn_pics',    
 ]
 
-# CLOUDINARY_STORAGE = {
-#     'CLOUD_NAME': 'Teste',
-#     'API_KEY': '227364633867929',
-#     'API_SECRET': 'D_ZUEdrUMQXj8cZdIJhklA4O8k8',
-# }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
