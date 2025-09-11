@@ -350,7 +350,7 @@ def submit_lesson(request, lesson_number):
             subject=f"Lesson {lesson_number} submitted for correction",
             body=f"The user {request.user.username} has submitted lesson {lesson_number} for correction.\nSend it back to {request.user.email}",
             from_email=settings.DEFAULT_FROM_EMAIL,
-            to=['airtonfabre95@gmail.com'],  # <-- your real email
+            to=['airtonfabre95@gmail.com'],
         )
         email.attach(edited_pdf.name, edited_pdf.read(), 'application/pdf')
         email.send()
