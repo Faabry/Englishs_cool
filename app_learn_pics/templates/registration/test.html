@@ -59,31 +59,13 @@
 <body style="background-color: aliceblue;">
     
     <main class="d-flex justify-content-center align-items-center flex-grow-1">
-        <div class="login-container w-100">
+     <div class="login-container w-100">
             <img src="{% static 'game/images/logo lessons.png' %}" class="col-12 img-fluid img_logo">
-            <form method="post">
-                {% csrf_token %}
-                <!-- <div class="mb-3 col-12 d-flex justify-content-center" style="font-size: 1.5rem;">
-                    {{ form.username.label_tag }}                    
-                </div> -->
-                <div class="mb-3 col-12 d-flex justify-content-center" style="font-size: 1.4rem;">                    
-                    {{ form.username }}
-                </div>
-                <!-- <div class="mb-3 col-12 d-flex justify-content-center" style="font-size: 1.5rem;">
-                    {{ form.password.label_tag }}                    
-                </div> -->
-                <div class="d-grid gap-2 mt-4 col-8 mx-auto justify-content-center" style="font-size: 1.4rem;">                    
-                    {{ form.password }}
-                </div>
-                <div class="d-grid gap-2 mt-4 col-8 mx-auto">
-                    <button type="submit" class="btn btn-primary">Login</button>
-                    <!-- <a href="{% url 'password_reset' %}" class="btn btn-link p-0 text-decoration-underline">Forgot Password?</a>
-                    <a href="{% url 'signup' %}" class="btn btn-link p-0 text-decoration-underline">Sign Up</a>                     -->
-                </div>
-            </form>
-            <br>
-        </div>
+        <div class="container mt-6">
+        <h2 class="text-center">You have been logged out.</h2>
+        <a href="{% url 'login' %}" class="btn btn-primary mt-3" style="margin-left: auto; margin-right: auto; display: block;">Log in again</a>
+    </div>  
+     </div>
     </main>
-    <!-- {% include "game/footer.html" %} -->
 </body>
 </html>

@@ -28,7 +28,7 @@ ALLOWED_HOSTS = [
 
 # LOGIN_URL = 'home'
 LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = 'category_selection'
+LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'login'
 
 # Application definition

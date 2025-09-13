@@ -100,7 +100,7 @@ def verify_email(request):
 
 def custom_logout(request):
     logout(request)
-    return render(request, 'registration/logged_out.html')
+    return render(request, 'registration/test.html')
 
 
 @login_required

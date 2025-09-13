@@ -71,11 +71,11 @@
     <main class="container text-center py-5">
         <img src="{% static 'game/images/logo lessons.png' %}" class="col-12 img_logo" alt="English's Cool Logo">
         <div class="container d-flex flex-column justify-content-center align-items-center text-center">
-            <h1 class="display-4 fw-bold">Bem-vindo(a), {{ user.username }}!</h1>
+            <h1 class="display-4 fw-bold">Welcome, {{ user.username }}!</h1>
             <p class="lead mb-4">Aprimore seu inglês com jogos e atividades interativas. Mergulhe em um mundo de aprendizado divertido!</p>
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                 <div class="col">
-                    <a href="{% url 'category_selection' %}" class="text-decoration-none text-dark">
+                    <a href="{% url 'memory_match' %}" class="text-decoration-none text-dark">
                         <div class="card h-100">
                             <img src="{% static 'cards/vocabulary.png' %}" class="card-img-top" alt="Vocabulary card">
                             <div class="card-body">
@@ -86,7 +86,7 @@
                     </a>
                 </div>
                 <div class="col">
-                    <a href="{% url 'category_selection' %}" class="text-decoration-none text-dark">
+                    <a href="{% url 'slot_machine' %}" class="text-decoration-none text-dark">
                         <div class="card h-100">
                             <img src="{% static 'cards/grammar.png' %}" class="card-img-top" alt="Grammar card">
                             <div class="card-body">
@@ -107,8 +107,7 @@
                         </div>
                     </a>
                 </div>
-            </div>
-            <a href="{% url 'category_selection' %}" class="btn btn-primary btn-lg mt-5">Começar a Aprender Agora</a>
+            </div>            
         </div>
     </main>
     {% include "game/footer.html" %}

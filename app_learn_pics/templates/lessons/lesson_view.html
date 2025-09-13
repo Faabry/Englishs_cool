@@ -54,7 +54,7 @@ main {
         .mobile-pdf-message {
             display: block;
             text-align: center;
-            margin-top: 2em;
+            margin-top: 50%;
         }
         .container1 {
             max-width: 95%;
@@ -85,7 +85,7 @@ main {
         <a href="{{ pdf_url }}" target="_blank" class="btn btn-primary">Open PDF Lesson</a>
     </div>
     <span>
-        <form class="container mt-4" method="post" action="{% url 'submit_lesson' lesson_number %}" enctype="multipart/form-data">
+        <form class="container mt-5" method="post" action="{% url 'submit_lesson' lesson_number %}" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="row g-2">
                 <!-- File input -->

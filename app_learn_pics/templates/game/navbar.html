@@ -16,6 +16,17 @@
         max-width: 6rem;
     }
 
+    .btn-logout {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    color: #fff;
+    border-color: #fff;
+}
+.btn-logout:hover {
+    color: #366092;
+    background-color: #fff;
+}
+
   @media (max-width: 991.98px) {    
     .img-logo {      
       max-width: 5rem !important;
@@ -94,8 +105,7 @@
           </ul>
         </li>
     <!-- Hidden template link so JS can build the correct URL -->
-    <a id="lessonHrefTemplate" href="{% url 'lesson_view' lesson_number=0 %}" class="d-none"></a>
-
+    <a id="lessonHrefTemplate" href="{% url 'lesson_view' lesson_number=0 %}" class="d-none"></a>    
     <script>
     document.addEventListener("DOMContentLoaded", function() {
       const searchInput = document.getElementById("lessonSearch");
@@ -180,35 +190,15 @@
             <li><a class="dropdown-item" href="{% url 'memory_match' %}">Memory Match</a></li>
             <li><a class="dropdown-item" href="{% url 'slot_machine' %}">Slot Machine</a></li>
             <li><a class="dropdown-item" href="{% url 'word_battleship' %}">Word Battle</a></li>
-            <li><a class="dropdown-item" href="{% url 'hangman' %}">Hangman</a></li>
+            <li><a class="dropdown-item" href="{% url 'hangman' %}">Hangman</a></li>            
           </ul>
         </li>
-        <!-- <li class="nav-item">
-          <a class="nav-link active" aria-current="page" style="color: #f8f9fa;">Contact Us</a>
-        </li> -->
-      </ul>
-    </div>
-    <!-- Profile icon always on the right -->
-    <!-- {% if user.is_authenticated %}
-    <div class="dropdown ms-auto">
-      <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="margin-right: 1rem;">
-        {% if user.profile.image.url %}
-          <img src="{{ user.profile.image.url }}" alt="Profile" class="rounded-circle" style="width: 36px; height: 36px; object-fit: cover;">
-        {% else %}
-          <img src="{% static 'game/images/default_profile.png' %}" alt="Profile" class="rounded-circle" style="width: 36px; height: 36px; object-fit: cover;">
-        {% endif %}
-      </a>
-      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown" style="margin-right: 1rem;">
-        <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
-        <li><hr class="dropdown-divider"></li>
-        <li>
-          <form method="post" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button type="submit" class="dropdown-item">Logout</button>
-          </form>
+        <li class="nav-item d-lg-none">
+                    <hr class="text-white my-2">
+                    <a class="nav-link" href="{% url 'logged_out' %}" style="color: aliceblue;">Logout</a>
         </li>
-      </ul>
-    </div>
-    {% endif %} -->
-  </div>
+      </ul>      
+    </div>    
+    <a class="btn btn-outline-light d-none d-lg-block btn-logout" href="{% url 'logged_out' %}" style="margin-right: 2%;">Logout</a>
+  </div>  
 </nav>
