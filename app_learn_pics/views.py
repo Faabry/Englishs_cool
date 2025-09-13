@@ -3,12 +3,18 @@ import random
 from django.conf import settings
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import logout
 from django.core.mail import send_mail
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.core.mail import EmailMessage
+from django.shortcuts import render, redirect
+from .forms import SignUpForm
+from .utils import send_verification_email
+from django import forms
+from django.contrib.auth import login
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import User, Profile
 
 @login_required
 def home(request):
@@ -41,13 +47,56 @@ def show_random_image(request, category):
 
 def signup(request):
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = SignUpForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('login')
+            user = form.save()
+            # Deactivate the user by default until they verify their email
+            user.is_active = False
+            user.save()
+            
+            # Store the user's email in the session to be used for verification
+            request.session['unverified_email'] = user.email
+            
+            send_verification_email(user)  # send code after signup
+            return redirect("verify_email")
     else:
-        form = UserCreationForm()
-    return render(request, 'registration/signup.html', {'form': form})
+        form = SignUpForm()
+    return render(request, "registration/signup.html", {"form": form})
+
+class VerificationForm(forms.Form):
+    code = forms.CharField(max_length=6)
+
+def verify_email(request):
+    if request.method == "POST":
+        form = VerificationForm(request.POST)
+        if form.is_valid():
+            code = form.cleaned_data["code"]            
+            try:                
+                email = request.session.get('unverified_email')
+                if not email:
+                    # Handle the case where the email is not found
+                    messages.error(request, "Email not found. Please sign up again.")
+                    return redirect("signup")
+                
+                user = get_object_or_404(User, email=email)
+                profile = user.profile
+                
+                if profile.verification_code == code:
+                    user.is_active = True
+                    user.save()
+                    profile.verification_code = None
+                    profile.save()
+                    messages.success(request, "Email successfully verified! You can now log in.")
+                    return redirect("login")
+                else:
+                    messages.error(request, "Invalid verification code.")
+            except User.DoesNotExist:
+                messages.error(request, "User not found. Please sign up again.")
+                return redirect("signup")
+    else:
+        form = VerificationForm()
+    return render(request, "registration/verify_email.html", {"form": form})
+
 
 def custom_logout(request):
     logout(request)
@@ -357,3 +406,15 @@ def submit_lesson(request, lesson_number):
         messages.success(request, "Your edited lesson has been submitted for correction!")
         return redirect('lesson_view', lesson_number=lesson_number)
     return redirect('lesson_view', lesson_number=lesson_number) 
+
+@login_required
+def terms_of_use(request):
+    return render(request, 'game/term.html')
+
+@login_required
+def privacy_policy(request):
+    return render(request, 'game/privacy.html')
+
+@login_required
+def support(request):
+    return render(request, 'game/support.html')

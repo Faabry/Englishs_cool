@@ -4,6 +4,11 @@ from . import views
 
 urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
+    path('signup/', views.signup, name='signup'),
+    path('verify_email/', views.verify_email, name='verify_email'),
+    path('terms-of-use/', views.terms_of_use, name='terms_of_use'),
+    path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
+    path('support/', views.support, name='support'),
     path('admin/', admin.site.urls), 
     path('', views.home, name='home'),  # <-- Add this line
     path('learn-pics', views.category_selection, name='category_selection'),
@@ -16,6 +21,5 @@ urlpatterns = [
     path('accounts/signup/', views.signup, name='signup'),
     path('lessons/', views.lessons_list, name='lessons_list'),
     path('lessons/<int:lesson_number>/', views.lesson_view, name='lesson_view'),
-    path('lessons/<int:lesson_number>/submit/', views.submit_lesson, name='submit_lesson'),
-    # path('accounts/logout/', views.custom_logout, name='logout'),  # <-- Use /accounts/logout/ and place it AFTER the include
+    path('lessons/<int:lesson_number>/submit/', views.submit_lesson, name='submit_lesson'),    
 ]

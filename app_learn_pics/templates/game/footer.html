@@ -18,18 +18,18 @@ main {
 <footer class="mt-4 py-3 w-100 position-relative" style="background-color: #366092; color: #fff; flex-shrink: 0;">
     <div class="container text-center">
         <div>
-            <strong>English's Cool</strong> &mdash; Version 1.2 &copy; {% now "Y" %}
+            <strong>English's Cool</strong> &mdash; Version 2.0 &copy; {% now "Y" %}
         </div>
         <div>
             <small>
                 Made with ❤️ by Airton Fabre |
-                <a href="mailto:support@englishscool.com" style="color: #f8f9fa; text-decoration: underline;">Contact Support</a>
+                <a href="{% url 'support' %}" style="color: #f8f9fa; text-decoration: underline;">Contact Support</a>
             </small>
         </div>
         <div>
             <small>
-                <a href="#" style="color: #f8f9fa; text-decoration: underline;">Privacy Policy</a> |
-                <a href="#" style="color: #f8f9fa; text-decoration: underline;">Terms of Use</a>
+                <a href="{% url 'privacy_policy' %}" style="color: #f8f9fa; text-decoration: underline;">Privacy Policy</a> |
+                <a href="{% url 'terms_of_use' %}" style="color: #f8f9fa; text-decoration: underline;">Terms of Use</a>
             </small>
         </div>
     </div>

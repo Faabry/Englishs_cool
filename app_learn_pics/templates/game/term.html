@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English's Cool - Termos de Uso</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <style>
+        html, body {
+            height: 100%;
+            max-width: 100vw;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        main {
+            flex: 1 0 auto;
+        }
+        .login-container {
+            border-radius: 8px;
+            margin-top: 40px;
+            max-width: 80%;
+        }
+
+        .img_logo {
+            max-width: 25rem;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+            padding-bottom: 5rem;
+        }
+
+        @media (max-width: 600px) {
+            .login-container {
+                width: 100%;
+                max-width: 100%;
+                margin-left: 0;
+                margin-right: 0;
+                border-radius: 0;
+            }
+
+            .img_logo {
+                max-width: 18rem;
+                padding-bottom: 2rem;
+                /* Keep auto margins for centering */
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+    </style>
+</head>
+<body style="background-color: aliceblue;">    
+    {% include "game/navbar.html" %}
+<main class="d-flex justify-content-center align-items-center flex-grow-1">    
+    <div class="login-container w-100">
+        <img src="{% static 'game/images/logo lessons.png' %}" class="col-12 img_logo">
+        <div class="container mt-6">
+            <h2>Termos de Uso</h2>
+            <p><strong>1. Aceitação dos Termos</strong></p>
+            <p>Ao acessar e usar a plataforma English's Cool, você concorda em cumprir e se sujeitar a estes Termos de Uso. Se você não concordar com qualquer parte dos termos, não use nossa plataforma.</p>
+
+            <p><strong>2. Uso da Plataforma</strong></p>
+            <p>A plataforma é destinada ao uso pessoal e não comercial. Você concorda em não reproduzir, duplicar, copiar, vender, revender ou explorar qualquer parte da plataforma para fins comerciais sem nosso consentimento expresso por escrito.</p>
+
+            <p><strong>3. Conta do Usuário</strong></p>
+            <p>Você é responsável por manter a confidencialidade de sua conta e senha e por restringir o acesso ao seu computador, e concorda em aceitar a responsabilidade por todas as atividades que ocorrem sob sua conta ou senha.</p>
+
+            <p><strong>4. Limitação de Responsabilidade</strong></p>
+            <p>A English's Cool não será responsável por quaisquer danos diretos, indiretos, incidentais, especiais ou consequenciais resultantes do uso ou da incapacidade de usar a plataforma.</p>
+
+            <p><strong>5. Modificações dos Termos</strong></p>
+            <p>Reservamos o direito de modificar estes Termos de Uso a qualquer momento. As alterações entrarão em vigor imediatamente após a sua publicação na plataforma. Seu uso contínuo da plataforma constitui sua aceitação dos termos modificados.</p>
+
+            <p><strong>6. Contato</strong></p>
+            <p>Se você tiver dúvidas sobre estes Termos de Uso, entre em contato conosco através da nossa página de Suporte.</p>
+        </div>
+    </div>
+</main>
+{% include "../game/footer.html" %}
+</body>
+</html>

@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English's Cool - Política de Privacidade</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <style>
+        html, body {
+            height: 100%;
+            max-width: 100vw;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        main {
+            flex: 1 0 auto;
+        }
+        .login-container {
+            border-radius: 8px;
+            margin-top: 40px;
+            max-width: 80%;
+        }
+
+        .img_logo {
+            max-width: 25rem;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+            padding-bottom: 5rem;
+        }
+
+        @media (max-width: 600px) {
+            .login-container {
+                width: 100%;
+                max-width: 100%;
+                margin-left: 0;
+                margin-right: 0;
+                border-radius: 0;
+            }
+
+            .img_logo {
+                max-width: 18rem;
+                padding-bottom: 2rem;
+                /* Keep auto margins for centering */
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+    </style>
+</head>
+<body style="background-color: aliceblue;">
+    {% include "game/navbar.html" %}
+<main class="d-flex justify-content-center align-items-center flex-grow-1">
+    <div class="login-container w-100">
+        <img src="{% static 'game/images/logo lessons.png' %}" class="col-12 img_logo">
+        <div class="container mt-6">
+            <h2>Política de Privacidade</h2>
+            <p><strong>1. Coleta de Informações</strong></p>
+            <p>Coletamos informações que você nos fornece diretamente, como nome, endereço de e-mail e dados de perfil, quando você se registra e usa nossa plataforma.</p>
+
+            <p><strong>2. Uso das Informações</strong></p>
+            <p>As informações coletadas são usadas para fornecer, manter, proteger e melhorar nossos serviços, desenvolver novos serviços e proteger a English's Cool e nossos usuários.</p>
+
+            <p><strong>3. Compartilhamento de Informações</strong></p>
+            <p>Não compartilhamos suas informações pessoais com empresas, organizações ou indivíduos externos à English's Cool, exceto em circunstâncias limitadas, como com seu consentimento, para fins de processamento externo ou por motivos legais.</p>
+
+            <p><strong>4. Segurança</strong></p>
+            <p>Empregamos medidas de segurança para proteger suas informações contra acesso não autorizado, alteração, divulgação ou destruição. No entanto, nenhum método de transmissão pela Internet ou de armazenamento eletrônico é 100% seguro.</p>
+
+            <p><strong>5. Cookies</strong></p>
+            <p>Usamos cookies para melhorar sua experiência em nossa plataforma, personalizar o conteúdo e analisar nosso tráfego. Você pode configurar seu navegador para recusar todos os cookies ou para indicar quando um cookie está sendo enviado.</p>
+
+            <p><strong>6. Contato</strong></p>
+            <p>Se você tiver dúvidas sobre esta Política de Privacidade, entre em contato conosco através da nossa página de Suporte.</p>
+        </div>
+    </div>
+</main>
+{% include "game/footer.html" %}
+</body>
+</html>

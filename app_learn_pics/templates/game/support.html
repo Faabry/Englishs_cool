@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English's Cool - Suporte</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <style>
+        html, body {
+            height: 100%;
+            max-width: 100vw;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        main {
+            flex: 1 0 auto;
+        }
+        .login-container {
+            border-radius: 8px;
+            margin-top: 40px;
+            max-width: 80%;
+        }
+
+        .img_logo {
+            max-width: 25rem;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+            padding-bottom: 5rem;
+        }
+
+        @media (max-width: 600px) {
+            .login-container {
+                width: 100%;
+                max-width: 100%;
+                margin-left: 0;
+                margin-right: 0;
+                border-radius: 0;
+            }
+
+            .img_logo {
+                max-width: 18rem;
+                padding-bottom: 2rem;
+                /* Keep auto margins for centering */
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+    </style>
+</head>
+<body style="background-color: aliceblue;">
+    {% include "game/navbar.html" %}
+<main class="d-flex justify-content-center align-items-center flex-grow-1">
+    <div class="login-container w-100">
+        <img src="{% static 'game/images/logo lessons.png' %}" class="col-12 img_logo">
+        <div class="container mt-6">
+            <h2>Suporte</h2>
+            <p>Se você precisar de ajuda ou tiver alguma dúvida, por favor, entre em contato conosco. Estamos aqui para ajudar.</p>
+            <p><strong>Email de Suporte:</strong> <a href="mailto:airtonfabre95@gmail.com">airtonfabre95@gmail.com</a></p>
+            <a href="https://wa.me/5519999846216?text=Olá, necessito de suporte na plataforma.">WhatsApp Suporte</a>
+            <p><strong>Perguntas Frequentes (FAQ):</strong></p>
+            <ul>
+                <li><strong>Como posso redefinir minha senha?</strong><br>
+                Vá para a página de login e clique em "Esqueci minha senha" para seguir as instruções.</li>
+                <li><strong>Não recebi o email de verificação. O que eu faço?</strong><br>
+                Verifique sua pasta de spam ou lixo eletrônico. Se ainda não conseguir encontrar, entre em contato com nosso suporte.</li>
+                <li><strong>Como posso atualizar minhas informações de perfil?</strong><br>
+                Faça login na sua conta e navegue até a seção de perfil para editar suas informações.</li>
+            </ul>
+            <p>Agradecemos por usar a English's Cool!</p>
+        </div>
+    </div>
+</main>
+{% include "game/footer.html" %}
+</body>
+</html>
