@@ -8,100 +8,333 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <style>
-        html, body {
-    height: 100%;
-}
-body {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-main {
-    flex: 1 0 auto;
-}
-
-.container1 {
-    max-width: 100%;
-    --bs-gutter-x: 1.5rem;
-    --bs-gutter-y: 0;
-    width: 100%;
-    padding-right: calc(var(--bs-gutter-x) * .5);
-    padding-left: calc(var(--bs-gutter-x) * .5);
-    margin-right: auto;
-    margin-left: auto;
-}
-
-.title{
-    font-size: 3rem;
-    font-weight: bold; 
-}
-
-.pdf-container {
-    width: 100%;
-    height: 80vh;
-    min-height: 400px;
-    max-width: 900px;
-    margin: auto;
-    display: block;
-}
-.mobile-pdf-message {
-    display: none;
-}
-    @media (max-width: 600px) {
-        .pdf-container {
+        html, body { height: 100%; }
+        body { min-height: 100vh; display: flex; flex-direction: column; }
+        main { flex: 1 0 auto; }
+        .title { font-size: 3rem; font-weight: bold; }
+        .title_listen_write { font-size: 3rem; font-weight: bold; }
+        .pdf-container { width: 100%; height: 80vh; min-height: 400px; display: block; margin-top: -1%;}
+        .mobile-pdf-message { display: none; }
+        .topics-sidebar { color: #366092; padding: 20px; height: 100%; }
+        .topics-sidebar ul { list-style: none; padding: 0; }
+        .topics-sidebar li { padding: 10px 0; cursor: pointer; border-bottom: 1px solid #c0c0c0; transition: color 0.2s ease-in-out; }
+        .topics-sidebar li:hover { color: #6c757d; }
+        .topics-sidebar .active { color: #366092; font-weight: bold; }
+                .listen-write-section {
             display: none;
-        }
-        .mobile-pdf-message {
-            display: block;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            /* height: 37rem; */
+            background-color: aliceblue;
+            height: 80vh;
+            padding: 20px;
             text-align: center;
-            margin-top: 50%;
+            border: solid;
+            border-radius: 10px;            
+            border-color: #366092;
+            border-width: 1px;
+            margin-top: -1%;
         }
-        .container1 {
-            max-width: 95%;
-        }
-    }
+        .listen-write-section h2 { margin-bottom: 20px; }
+        .listen-write-section .controls { display: flex; gap: 10px; margin-top: 20px; }
 
-    @media (max-width: 450px){
-        .title{
-            font-size: 2.5rem;
-        }        
-    }
+        @media (max-width: 991px) {
+            /* .topics-sidebar { display: none; } */
+            .pdf-container { display: none; }
+            .mobile-pdf-message { display: block; text-align: center; margin-top: 30%; }
+            .listen-write-section { height: 22rem; }
+        }
+        @media (max-width: 450px){
+            .title { font-size: 2.5rem; }
+            .title_listen_write { font-size: 2rem; }
+            .listen-write-section { height: 22rem};
+        }
     </style>
 </head>
 <body style="background-color: aliceblue">
     {% include "game/navbar.html" %}
-    <main class="container1 flex-grow-1" style="background-color: #e3f2fd;">
-            <div>
-            <span class="title">
-                <span style="color: #000;">Lesson</span> <span style="color: #ff0000;">{{ lesson_number }}</span>
-            </span>
-    <!-- Desktop/tablet: show PDF -->
-    <div class="pdf-container">
-        <embed src="{{ pdf_url }}" type="application/pdf" width="100%" height="100%" />
-    </div>
-    <!-- Mobile: show message and button -->
-    <div class="mobile-pdf-message">
-        <p>To access the PDF lesson on your mobile, click the button below:</p>
-        <a href="{{ pdf_url }}" target="_blank" class="btn btn-primary">Open PDF Lesson</a>
-    </div>
-    <span>
-        <form class="container mt-5" method="post" action="{% url 'submit_lesson' lesson_number %}" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="row g-2">
-                <!-- File input -->
-                <div class="col-12 col-md-8">
-                    <input type="file" class="form-control" name="edited_pdf" accept="application/pdf" required>
+    <main class="container-fluid flex-grow-1" style="background-color: #e3f2fd; padding: 0;">
+        <div class="row g-0" style="height: 100%;">
+            <!-- Main Content Area -->
+            <div class="col-lg-9 col-12 p-3">
+                <span class="title">
+                    <!-- <span style="color: #000;">Lesson</span> <span style="color: #ff0000;">{{ lesson_number }}</span> -->
+                    <span style="color: #e3f2fd;">.</span>
+                </span>
+                <!-- Desktop/tablet: show PDF -->
+                <div id="pdf-container" class="pdf-container">
+                    <embed id="pdfViewer" src="{% static pdf_url %}" type="application/pdf" width="100%" height="100%" />
                 </div>
-                <!-- Submit button -->
-                <div class="col-12 col-md-4">
-                    <button type="submit" class="btn btn-success w-100">Send Lesson to Correction</button>
+                <div id="listen-write-container" class="listen-write-section shadow-sm p-4">
+                    <h3 class="mb-3 title_listen_write">🎧 Listen & Write</h3>
+                    <p class="text-muted">Listen to each sentence and practice writing it down.</p>
+
+                    <!-- Player area -->
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <button id="play-button" class="btn btn-primary">
+                        ▶ Play All
+                        </button>
+                        <button id="pause-button" class="btn btn-secondary" disabled>
+                        ⏸ Pause
+                        </button>
+                    </div>
+
+                    <!-- Progress -->
+                    <div class="progress mb-3" style="width: 85%;">
+                        <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%">
+                        0%
+                        </div>
+                    </div>
+
+                    <!-- Sentence display -->
+                    <div class="p-3 bg-light rounded" id="sentence-box" style="background-color: #e3f2fd;">
+                        <span class="text-muted">...</span>
+                    </div>
+
+                    <!-- Status -->
+                    <p id="message" class="mt-3 text-info"></p>
+                </div>
+
+                <!-- Mobile PDF message -->
+                <div class="mobile-pdf-message">
+                    <p>Para uma experência ainda melhor, recomendamos utilizar um computador, mas se estiver pelo celular, basta clicar no botão abaixo para acessar o PDF:</p>
+                    <a id="mobile-link" href="{% static pdf_url %}" target="_blank" class="btn btn-primary">Open PDF Lesson</a>
                 </div>
             </div>
-        </form>
-    </span>
-    <br>
+
+            <!-- Topics Sidebar Desktop -->
+            <div class="container col-lg-3 d-none d-lg-block topics-sidebar"
+                 style="border-radius: 10px; border-color: #366092; background-color: aliceblue; border-style: solid; margin-top: 5rem; height: 75%; border-width: 0.5px; width: 20%;">
+                <h5>Lesson {{ lesson_number }}</h5>
+                <ul>
+                    {% for topic_data in topics %}
+                        <li onclick="loadPDF('{{ topic_data.url }}', event)"
+                            class="topic-item {% if topic_data.path == current_topic_path %}active{% endif %}">
+                            {{ topic_data.name }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <!-- Mobile Topics Dropdown -->
+            <div class="d-lg-none text-center my-3">
+                <div class="dropdown">
+                    <button class="col-11 btn btn-outline-primary dropdown-toggle" type="button" id="topicsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Lesson {{ lesson_number }}
+                    </button>
+                    <ul class="col-11 dropdown-menu" aria-labelledby="topicsDropdown">
+                        {% for topic_data in topics %}
+                            <li>
+                                <a class="dropdown-item {% if topic_data.path == current_topic_path %}active{% endif %}"
+                                href="javascript:void(0);" onclick="loadPDF('{{ topic_data.url }}', event)">
+                                    {{ topic_data.name }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <!-- Upload corrected PDF -->
+            <span style="background-color: aliceblue;">
+                <form class="container mt-5" method="post" action="{% url 'submit_lesson' lesson_number %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row g-2">
+                        <div class="col-12 col-md-8">
+                            <input type="file" class="form-control" name="edited_pdf" accept="application/pdf" required>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <button type="submit" class="btn btn-success w-100">Send Lesson to Correction</button>
+                        </div>
+                    </div>
+                </form>
+            </span>
+        </div>
     </main>
     {% include "game/footer.html" %}
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> -->
+
+    <!-- JavaScript -->
+    <script>
+    const pdfContainer = document.getElementById('pdf-container');
+    const listenWriteContainer = document.getElementById('listen-write-container');
+    const mobileLink = document.getElementById('mobile-link');
+    const playButton = document.getElementById('play-button');
+    const pauseButton = document.getElementById('pause-button');
+    
+    let currentSentenceIndex = 0;
+    let sentences = [];
+    let isSpeaking = false;
+    let isPaused = false;
+    let queueTimer = null;
+
+    function loadPDF(url, event) {
+        const isListenWrite = url.includes('.json');
+        
+        if (isListenWrite) {
+            pdfContainer.style.display = 'none';
+            listenWriteContainer.style.display = 'flex';
+            //mobileLink.href = '#';
+            //mobileLink.textContent = 'Listen and Write not available on mobile';
+            document.querySelector('.mobile-pdf-message').style.display = 'none'; // ✅ Hide message
+            fetchSentences(url);
+        } else if (window.innerWidth <= 991) {
+            pdfContainer.style.display = 'none';
+            listenWriteContainer.style.display = 'none';
+            mobileLink.href = url;
+            mobileLink.textContent = 'Open PDF Lesson';
+            document.querySelector('.mobile-pdf-message').style.display = 'block'; // ✅ Show message
+            document.querySelector('.pdf-container').style.display = 'none'; // ✅ Show message
+        } else {
+            pdfContainer.style.display = 'block';
+            listenWriteContainer.style.display = 'none';
+            const pdfViewer = document.getElementById('pdfViewer');
+            pdfViewer.src = url;
+            mobileLink.href = url;
+            mobileLink.textContent = 'Open Content';
+            window.speechSynthesis.cancel();
+            isSpeaking = false;
+            // document.querySelector('.mobile-pdf-message').style.display = 'block'; // ✅ Show message
+            // document.querySelector('.pdf-container').style.display = 'none'; // ✅ Show message
+        }
+
+        document.querySelectorAll('.topic-item').forEach(item => item.classList.remove('active'));
+        event.target.classList.add('active');
+    }
+
+    async function fetchSentences(url) {
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            sentences = await response.json();
+            if (sentences.length > 0) {
+                setMessage(`Ready! ${sentences.length} sentences to practice.`);
+            } else {
+                setMessage("No sentences found for this lesson.");
+            }
+            currentSentenceIndex = 0;
+        } catch (error) {
+            console.error("Error fetching sentences:", error);
+            setMessage("Não existem sentence para esta lesson.");
+        }
+    }
+
+    function speakAllSequentially() {
+        if (isSpeaking || sentences.length === 0) return;
+
+        window.speechSynthesis.cancel(); // reset
+        isSpeaking = true;
+        isPaused = false;
+        currentSentenceIndex = 0;
+        pauseButton.disabled = false;
+        pauseButton.textContent = "⏸ Pause";
+        playNextSentence();
+    }     
+
+    let selectedVoice = null;
+
+    function loadVoices() {
+        const voices = speechSynthesis.getVoices();
+        // Pick a better sounding voice (adjust this to what you find available in your browser)
+        selectedVoice = voices.find(v => 
+            v.name.includes("Google US English") || 
+            v.name.includes("Microsoft") || 
+            v.name.toLowerCase().includes("natural")
+        ) || voices.find(v => v.lang === "en-US"); // fallback
+        
+        console.log("Selected voice:", selectedVoice?.name || "Default");
+    }
+
+    speechSynthesis.onvoiceschanged = loadVoices;
+
+    function playNextSentence() {
+        let selectedVoice = null;
+        if (currentSentenceIndex >= sentences.length) {
+            setMessage("✅ All sentences played!");
+            document.getElementById("progress-bar").style.width = "100%";
+            document.getElementById("progress-bar").textContent = "100%";
+            isSpeaking = false;
+            pauseButton.disabled = true;
+            return;
+        }
+
+        if (isPaused) return;
+
+        const sentence = sentences[currentSentenceIndex];
+        
+        // Display current sentence
+        document.getElementById("sentence-box").innerHTML = `<strong></strong>`;
+        setMessage(`Playing sentence ${currentSentenceIndex + 1}/${sentences.length}...`);
+
+        // Update progress bar
+        const percent = Math.round(((currentSentenceIndex) / sentences.length) * 100);
+        const progressBar = document.getElementById("progress-bar");
+        progressBar.style.width = percent + "%";
+        progressBar.textContent = percent + "%";
+
+        const utterance = new SpeechSynthesisUtterance(sentence);
+        utterance.lang = "en-US";
+        if (selectedVoice) utterance.voice = selectedVoice;
+        utterance.pitch = 1.05;
+        utterance.rate = 0.95;
+
+
+        utterance.onend = () => {
+            if (!isPaused) {
+                currentSentenceIndex++;
+                queueTimer = setTimeout(playNextSentence, 1500);
+            }
+        };
+
+        window.speechSynthesis.speak(utterance);
+    }        
+
+    function togglePause() {
+        if (!isSpeaking) return;
+
+        if (!isPaused) {
+            isPaused = true;
+            window.speechSynthesis.pause();
+            clearTimeout(queueTimer);
+            setMessage("⏸ Paused");
+            pauseButton.textContent = "▶ Resume";
+        } else {
+            isPaused = false;
+            window.speechSynthesis.resume();
+            setMessage(`Resumed at sentence ${currentSentenceIndex + 1}/${sentences.length}...`);
+            pauseButton.textContent = "⏸ Pause";
+            if (currentSentenceIndex < sentences.length && !window.speechSynthesis.speaking) {
+                queueTimer = setTimeout(playNextSentence, 1000);
+            }
+        }
+    }
+
+    playButton.addEventListener('click', speakAllSequentially);
+    pauseButton.addEventListener('click', togglePause);
+
+    // Initial load check
+    document.addEventListener('DOMContentLoaded', () => {
+        const currentPath = window.location.pathname;
+        if (currentPath.includes('listen_write')) {
+            pdfContainer.style.display = 'none';
+            listenWriteContainer.style.display = 'flex';
+            mobileLink.href = '#';
+            mobileLink.textContent = 'Listen and Write not available on mobile';
+            const urlPath = "{% static 'lessons/' %}{{ lesson_number }}.json";
+            fetchSentences(urlPath);
+        }
+    });
+
+    // Prevent form submit inside listening
+    // const form = document.querySelector('form');
+    // form.addEventListener('submit', function(event) {
+    //     if (window.location.pathname.includes('listen_write')) {
+    //         event.preventDefault();
+    //         setMessage("❌ Cannot submit PDF in Listen and Write mode.");
+    //     }
+    // });
+
+    function setMessage(text) {
+        document.getElementById('message').textContent = text;
+    }
+</script>
 </body>
 </html>

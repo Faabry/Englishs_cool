@@ -375,12 +375,41 @@ def hangman(request):
     })
 
 @login_required
-def lesson_view(request, lesson_number):
-    # Build static URL for the PDF
-    pdf_url = f'/static/lessons/{lesson_number}.pdf'
+# def lesson_view(request, lesson_number):
+#     # Build static URL for the PDF
+#     pdf_url = f'/static/lessons/{lesson_number}.pdf'
+#     return render(request, 'lessons/lesson_view.html', {
+#         'lesson_number': lesson_number,
+#         'pdf_url': pdf_url,
+#     })
+def lesson_view(request, lesson_number, topic=None):
+    # A dictionary to map topics to their file paths
+    # You can add more topics here as you create more PDFs
+    topic_map = {
+        'lesson': f'/lessons/{lesson_number}.pdf',
+        'homework': f'homeworks/{lesson_number}.pdf',
+        'listening': f'lessons/{lesson_number}.json',
+    }
+
+    # Determine which PDF to load based on the URL topic parameter
+    if topic and topic in topic_map:
+        pdf_path = topic_map[topic]
+    else:
+        # Default to 'lesson' if no topic is provided or is invalid
+        pdf_path = topic_map['lesson']
+
+    # The list of topics to display in the sidebar
+    topics_list = [
+        {'name': 'Lesson', 'url': f'/static/lessons/{lesson_number}.pdf', 'path': topic_map['lesson']},
+        {'name': 'Homework', 'url': f'/static/homeworks/{lesson_number}.pdf', 'path': topic_map['homework']},
+        {'name': 'Listening', 'url': f'/static/lessons/{lesson_number}.json', 'path': topic_map['listening']},
+    ]
+
     return render(request, 'lessons/lesson_view.html', {
         'lesson_number': lesson_number,
-        'pdf_url': pdf_url,
+        'pdf_url': pdf_path,
+        'topics': topics_list,
+        'current_topic_path': pdf_path,
     })
 
 

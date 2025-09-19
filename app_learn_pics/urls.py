@@ -21,6 +21,8 @@ urlpatterns = [
     path('accounts/signup/', views.signup, name='signup'),
     path('accounts/logged-out/', views.custom_logout, name='logged_out'),
     path('lessons/', views.lessons_list, name='lessons_list'),
-    path('lessons/<int:lesson_number>/', views.lesson_view, name='lesson_view'),
+    # path('lessons/<int:lesson_number>/', views.lesson_view, name='lesson_view'),        
+    path('lessons/<int:lesson_number>/<str:topic>/', views.lesson_view, name='lesson_topic_view'),
+    path('lessons/<int:lesson_number>/', views.lesson_view, name='lesson_view'),            
     path('lessons/<int:lesson_number>/submit/', views.submit_lesson, name='submit_lesson'),    
 ]
