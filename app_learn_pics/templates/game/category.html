@@ -29,7 +29,8 @@ main {
         .make-sentence { font-size: 3.2rem; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; font-weight: 500; color: #222; text-align: center; }
         @media screen and (max-width: 450px){
             .make-sentence {
-                font-size: 2.5rem;
+                font-size: 1.5rem;
+                margin-top: 20px;
             }
             .title{
                 font-size: 2.5rem;
@@ -37,16 +38,16 @@ main {
         }
     </style>
 </head>
-<body style="background-color: aliceblue">
+<body style="background-color: #e3f2fd;">
     {% include "game/navbar.html" %}
-     <main class="container flex-grow-1" style="background-color: #e3f2fd;">
-        <div class="container" style="background-color: #e3f2fd;">
+     <main class="container flex-grow-1">
+        <div class="container">
             <div class="d-flex align-items-center mb-3">
                 <span class="title">
                     <span style="color: #000;">Learn</span> <span style="color: #ff0000;">Pics</span>
                 </span>
             </div>
-            <h1 style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">Choose a Category:</h1>
+            <h1 style="font-family: 'Lucida Sans', '#e3f2fd;Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">Choose a Category:</h1>
             <div class="row">
                 {% for cat in categories %}
                     <div class="col-6 col-md-3 mb-2 d-flex justify-content-center align-items-center">
@@ -67,7 +68,7 @@ main {
 
             {% if selected_image %}
             <div class="row align-items-start justify-content-center align-items-center">
-                <div class="col-12 col-md-6 d-flex justify-content-center align-items-center order-1 order-md-1" style="min-height: 400px;">
+                <div class="col-12 col-md-6 d-flex justify-content-center align-items-center order-1 order-md-1">
                     <div class="make-sentence">
                         Make a<br>sentence<br>with...
                     </div>

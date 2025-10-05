@@ -8,100 +8,517 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <style>
-        html, body {
+        html, body { height: 100%; }
+        body { min-height: 100vh; display: flex; flex-direction: column; }
+        main { flex: 1 0 auto; }
+        .title { font-size: 3rem; font-weight: bold; }
+        .title_listen_write { font-size: 3rem; font-weight: bold; }
+        .pdf-container { width: 100%; height: 80vh; min-height: 400px; display: block; margin-top: -1%;}
+        .mobile-pdf-message { display: none; }
+        .topics-sidebar { color: #366092; padding: 20px; height: 100%; }
+        .topics-sidebar ul { list-style: none; padding: 0; }
+        .topics-sidebar li { padding: 10px 0; cursor: pointer; border-bottom: 1px solid #c0c0c0; transition: color 0.2s ease-in-out; }
+        .topics-sidebar li:hover { color: #6c757d; }
+        .topics-sidebar .active { color: #366092; font-weight: bold; }
+                .listen-write-section {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            /* height: 37rem; */
+            background-color: aliceblue;
+            height: 80vh;
+            padding: 20px;
+            text-align: center;
+            border: solid;
+            border-radius: 10px;            
+            border-color: #366092;
+            border-width: 1px;
+            margin-top: -1%;
+        }
+        .flashcard-stack {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            height: 220px;
+            margin: 0 auto;
+            perspective: 800px;            
+        }
+        .flashcard {
+    position: absolute;
+    width: 100%;
     height: 100%;
-}
-body {
-    min-height: 100vh;
+    left: 0;
+    top: 20px;
+    background: linear-gradient(135deg, #366092 0%, #1c3f6a 100%);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px #0002;
     display: flex;
     flex-direction: column;
-}
-main {
-    flex: 1 0 auto;
-}
-
-.container1 {
-    max-width: 100%;
-    --bs-gutter-x: 1.5rem;
-    --bs-gutter-y: 0;
-    width: 100%;
-    padding-right: calc(var(--bs-gutter-x) * .5);
-    padding-left: calc(var(--bs-gutter-x) * .5);
-    margin-right: auto;
-    margin-left: auto;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem;
+    font-size: 1.1rem;
+    opacity: 1;
+    z-index: 1;
+    transition: transform 0.5s ease, opacity 0.5s ease;
 }
 
-.title{
-    font-size: 3rem;
-    font-weight: bold; 
+/* Base stack layers */
+.flashcard.front {
+    z-index: 3;
+    transform: translateY(0) scale(1);
+}
+.flashcard.behind {
+    z-index: 2;
+    transform: translateY(10px) scale(0.97);
+    opacity: 0.9;
+}
+.flashcard.out {
+    z-index: 1;
+    transform: translateY(20px) scale(0.95);
+    opacity: 0.7;
 }
 
-.pdf-container {
-    width: 100%;
-    height: 80vh;
-    min-height: 400px;
-    max-width: 900px;
-    margin: auto;
-    display: block;
+/* Slide out to left */
+.flashcard.swipe-left {
+    transform: translateX(-120%) rotate(-5deg);
+    opacity: 0;
 }
-.mobile-pdf-message {
-    display: none;
+
+/* Slide in from left (previous button) */
+.flashcard.swipe-right-in {
+    animation: swipeRightIn 0.5s ease forwards;
 }
-    @media (max-width: 600px) {
-        .pdf-container {
-            display: none;
+
+        .flashcard-desc {
+            font-weight: bold;
+            color: aliceblue;
+            margin-bottom: 0.5rem;
         }
-        .mobile-pdf-message {
-            display: block;
+        .flashcard-example {
+            font-size: 1.05rem;
+            color: aliceblue;
+        }
+        .flashcard-title {
+            font-size: 1.25rem;            
+            color: #fff;            
+        }
+        .flashcard-definition {
+            font-size: 1rem;            
+            color: #f0f0f0;
+            margin-bottom: 0.5rem;
+        }
+        .flashcard-label {
+            font-size: 1rem;            
+            color: #d0d0d0;            
+        }
+        .flashcard-sentence {
+            font-size: 1.1rem;            
+            color: #e0e0e0;            
             text-align: center;
-            margin-top: 50%;
         }
-        .container1 {
-            max-width: 95%;
+        .flashcard-divider {
+            width: 80%;
+            border-top: 1px solid #ffffff33;
+            margin: 0.5rem 0;
         }
-    }
 
-    @media (max-width: 450px){
-        .title{
-            font-size: 2.5rem;
-        }        
+@keyframes swipeRightIn {
+    from {
+        transform: translateX(-120%) rotate(-5deg);
+        opacity: 0;
     }
+    to {
+        transform: translateX(0) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+
+
+        .listen-write-section h2 { margin-bottom: 20px; }
+        .listen-write-section .controls { display: flex; gap: 10px; margin-top: 20px; }
+
+        @media (max-width: 991px) {
+            /* .topics-sidebar { display: none; } */
+            .pdf-container { display: none; }
+            .mobile-pdf-message { display: block; text-align: center; margin-top: 30%; }
+            .listen-write-section { height: 22rem; }
+        }
+        @media (max-width: 450px){
+            .title { font-size: 2.5rem; }
+            .title_listen_write { font-size: 2rem; }
+            .listen-write-section { height: 22rem};
+        }
     </style>
 </head>
-<body style="background-color: aliceblue">
+<body style="background-color: #e3f2fd;">
     {% include "game/navbar.html" %}
-    <main class="container1 flex-grow-1" style="background-color: #e3f2fd;">
-            <div>
-            <span class="title">
-                <span style="color: #000;">Lesson</span> <span style="color: #ff0000;">{{ lesson_number }}</span>
-            </span>
-    <!-- Desktop/tablet: show PDF -->
-    <div class="pdf-container">
-        <embed src="{{ pdf_url }}" type="application/pdf" width="100%" height="100%" />
-    </div>
-    <!-- Mobile: show message and button -->
-    <div class="mobile-pdf-message">
-        <p>To access the PDF lesson on your mobile, click the button below:</p>
-        <a href="{{ pdf_url }}" target="_blank" class="btn btn-primary">Open PDF Lesson</a>
-    </div>
-    <span>
-        <form class="container mt-5" method="post" action="{% url 'submit_lesson' lesson_number %}" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="row g-2">
-                <!-- File input -->
-                <div class="col-12 col-md-8">
-                    <input type="file" class="form-control" name="edited_pdf" accept="application/pdf" required>
+    <main class="container-fluid flex-grow-1" style="padding: 0;">
+        <div class="row g-0" style="height: 100%;">
+            <!-- Main Content Area -->
+                    <!-- ...existing code... -->
+            <div class="col-lg-9 col-12 p-3">
+                <span class="title">
+                    <span style="color: #e3f2fd;">.</span>
+                </span>
+                <!-- Desktop/tablet: show PDF -->
+                <div id="pdf-container" class="pdf-container">
+                    <embed id="pdfViewer" src="{% static pdf_url %}" type="application/pdf" width="100%" height="100%" />
                 </div>
-                <!-- Submit button -->
-                <div class="col-12 col-md-4">
-                    <button type="submit" class="btn btn-success w-100">Send Lesson to Correction</button>
+                <!-- Listen & Write Section -->
+                <div id="listen-write-container" class="listen-write-section shadow-sm p-4">
+                    <h3 class="mb-3 title_listen_write">🎧 Listen & Write</h3>
+                    <p class="text-muted">Listen to each sentence and practice writing it down.</p>
+                    <div class="controls mb-3">
+                        <button id="play-button" class="btn btn-primary me-2">▶ Play All</button>
+                        <button id="pause-button" class="btn btn-secondary" disabled>⏸ Pause</button>
+                    </div>
+                    <div id="message" class="mb-2"></div>
+                    <div id="sentence-box" class="mb-2"></div>
+                    <div class="progress" style="height: 24px; width: 50%;">
+                        <div id="progress-bar" class="progress-bar" style="width: 0%;">0%</div>
+                    </div>
                 </div>
+                <!-- Vocabulary Flashcards Section -->
+                <div id="vocab-container" class="listen-write-section shadow-sm p-4" style="height:80vh; background:#fff; border:1px solid #366092; border-radius:10px; display:none;">
+                    <h3 class="mb-3 title_listen_write">📖 Vocabulary</h3>
+                    <p class="text-muted">Study and review key vocabulary for this lesson.</p>
+                    <div id="flashcard-stack" class="flashcard-stack"></div>
+                    <div class="mt-5">
+                        <button id="prev-flashcard" class="btn btn-outline-primary me-2">Previous</button>
+                        <button id="next-flashcard" class="btn btn-outline-primary">Next</button>
+                    </div>
+                </div>
+                <!-- Mobile PDF message -->
+                <div class="mobile-pdf-message" id="mobile-pdf-message">
+                    <p>Para uma experência ainda melhor, recomendamos utilizar um computador, mas se estiver pelo celular, basta clicar no botão abaixo para acessar o PDF:</p>
+                    <a id="mobile-link" href="{% static pdf_url %}" target="_blank" class="btn btn-primary">Open PDF Lesson</a>
+                </div>                
+                <!-- Upload corrected PDF -->
+                <div id="submit-lesson-container" class="listen-write-section shadow-sm p-4" style="display:none; height:80vh;">
+                    <h3 class="mb-3 title_listen_write">✅ Submit for correction</h3>
+                    <p class="text-muted">If you want, you can send your lessons to be corrected.</p>
+                    <div class="d-flex flex-column justify-content-center align-items-center" style="height:60vh;">
+                        <form method="post" action="{% url 'submit_lesson' lesson_number %}" enctype="multipart/form-data" class="mt-4">
+                            {% csrf_token %}
+                            <input type="file" name="edited_pdf" accept="application/pdf" required>
+                            <button type="submit" class="btn btn-success">Submit for Correction</button>
+                        </form>
+                    </div>
+                </div>
+            </div>            
+            <!-- Topics Sidebar Desktop -->
+            <div class="container col-lg-3 d-none d-lg-block topics-sidebar"
+                 style="border-radius: 10px; border-color: #366092; background-color: aliceblue; border-style: solid; margin-top: 5rem; height: 75%; border-width: 0.5px; width: 20%;">
+                <h5>Lesson {{ lesson_number }}</h5>
+                <ul>
+                    {% for topic_data in topics %}
+                        <li onclick="loadPDF('{{ topic_data.url }}', event)"
+                            class="topic-item {% if topic_data.path == current_topic_path %}active{% endif %}">
+                            {{ topic_data.name }}
+                        </li>
+                    {% endfor %}
+                </ul>
             </div>
-        </form>
-    </span>
-    <br>
+            <div class="d-lg-none text-center my-3">
+            <select class="form-select" style="width: 90%; align-items: center; margin-left: auto; margin-right: auto;"
+                    onchange="loadPDF(this.value, event)">
+                <option selected>Lesson {{ lesson_number }}</option>
+                {% for topic_data in topics %}
+                    <option value="{{ topic_data.url }}" 
+                        {% if topic_data.path == current_topic_path %}selected{% endif %}>
+                        {{ topic_data.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        </div>
     </main>
     {% include "game/footer.html" %}
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> -->
+
+    <!-- JavaScript -->
+    <script>
+    const pdfContainer = document.getElementById('pdf-container');
+    const listenWriteContainer = document.getElementById('listen-write-container');
+    const mobilePDFMessage = document.getElementById('mobile-pdf-message');
+    const mobileLink = document.getElementById('mobile-link');
+    const playButton = document.getElementById('play-button');
+    const pauseButton = document.getElementById('pause-button');
+    
+    let currentSentenceIndex = 0;
+    let sentences = [];
+    let isSpeaking = false;
+    let isPaused = false;
+    let queueTimer = null;
+
+    let vocabCards = [];
+    let currentVocabIndex = 0;
+
+    function loadVocabFlashcards(url) {
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                vocabCards = [];
+
+                for (const desc in data) {
+                    let [title, definition] = desc.split(": ");
+                    title = title.trim();
+                    definition = (definition || "").trim();
+
+                    data[desc].forEach(example => {
+                        const match = example.match(/^\(([^)]+)\)\s*(.*)$/);
+                        let label = "";
+                        let sentence = example;
+
+                        if (match) {
+                            label = match[1];
+                            sentence = match[2];
+                        }
+
+                        vocabCards.push({ title, definition, label, sentence });
+                    });
+                }
+
+                currentVocabIndex = 0;
+                renderFlashcardStack();
+            })
+            .catch(() => {
+                document.getElementById("flashcard-stack").innerHTML =
+                    "<div>No vocabulary found for this lesson.</div>";
+            });
+    }
+
+    function renderFlashcardStack() {
+        const stack = document.getElementById("flashcard-stack");
+        stack.innerHTML = "";
+
+        if (vocabCards.length === 0) {
+            stack.innerHTML = "<div>No vocabulary found for this lesson.</div>";
+            return;
+        }
+
+        // Render only the current card and the next few for visual stacking
+        vocabCards.forEach((card, i) => {
+            let position = (i - currentVocabIndex + vocabCards.length) % vocabCards.length;
+            let className =
+                position === 0 ? "flashcard front" :
+                position === 1 ? "flashcard behind" :
+                "flashcard out";
+
+            stack.innerHTML += `
+                <div class="${className}">
+                    <div class="flashcard-title"><strong>${card.title}</strong></div>
+                    <div class="flashcard-definition">${card.definition}</div>
+                    <hr class="flashcard-divider" />
+                    <div class="flashcard-label"><em>${card.label}</em></div>
+                    <div class="flashcard-sentence">${card.sentence}</div>
+                    <div class="text-center mt-2" style="font-size: 0.85rem; color: #f0f0f0;">
+                        <span>${(currentVocabIndex + 1)} / ${vocabCards.length}</span>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    // ✅ Animate Next
+    document.getElementById("next-flashcard").onclick = function () {
+        if (vocabCards.length <= 1) return;
+        const stack = document.getElementById("flashcard-stack");
+        const frontCard = stack.querySelector(".flashcard.front");
+
+        // Animate out
+        frontCard.classList.add("swipe-left");
+
+        setTimeout(() => {
+            // Move to next index
+            currentVocabIndex = (currentVocabIndex + 1) % vocabCards.length;
+            renderFlashcardStack();
+        }, 500);
+    };
+
+    // ✅ Animate Previous
+    document.getElementById("prev-flashcard").onclick = function () {
+        if (vocabCards.length <= 1) return;
+
+        // Move to previous index
+        currentVocabIndex = (currentVocabIndex - 1 + vocabCards.length) % vocabCards.length;
+        renderFlashcardStack();
+
+        const stack = document.getElementById("flashcard-stack");
+        const newFront = stack.querySelector(".flashcard.front");
+        newFront.classList.add("swipe-right-in");
+    };
+
+    function loadPDF(url, event) {
+        pdfContainer.style.display = 'none';
+        listenWriteContainer.style.display = 'none';
+        mobilePDFMessage.style.display = 'none';
+        document.getElementById("vocab-container").style.display = "none";
+        document.getElementById("submit-lesson-container").style.display = "none";        
+        
+        if (url.includes(".pdf") && window.innerWidth > 991) {
+            pdfContainer.style.display = 'block';            
+            document.getElementById('pdfViewer').src = url;
+
+        } else if (url.includes(".pdf") && window.innerWidth <= 991) {
+            mobilePDFMessage.style.display = 'block';
+            mobileLink.href = url;
+            mobileLink.textContent = 'Open PDF Lesson';
+
+        } else if (url.includes("/vocabulary/")) {
+            document.getElementById("vocab-container").style.display = "block";            
+            loadVocabFlashcards(url);
+
+        } else if (url.includes(".json")) {          
+            
+            listenWriteContainer.style.display = 'flex';
+            fetchSentences(url);
+            
+        } else if (url.includes("/submit/")) {
+            document.getElementById("submit-lesson-container").style.display = "block";
+        }
+        
+        document.querySelectorAll('.topic-item').forEach(item => item.classList.remove('active'));
+        event.target.classList.add('active');
+    }
+
+    async function fetchSentences(url) {
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            sentences = await response.json();
+            if (sentences.length > 0) {
+                setMessage(`Ready! ${sentences.length} sentences to practice.`);
+            } else {
+                setMessage("No sentences found for this lesson.");
+            }
+            currentSentenceIndex = 0;
+        } catch (error) {
+            console.error("Error fetching sentences:", error);
+            setMessage("Não existem sentence para esta lesson.");
+        }
+    }
+
+    function speakAllSequentially() {
+        if (isSpeaking || sentences.length === 0) return;
+
+        window.speechSynthesis.cancel(); // reset
+        isSpeaking = true;
+        isPaused = false;
+        currentSentenceIndex = 0;
+        pauseButton.disabled = false;
+        pauseButton.textContent = "⏸ Pause";
+        playNextSentence();
+    }     
+
+    let selectedVoice = null;
+
+    function loadVoices() {
+        const voices = speechSynthesis.getVoices();
+        // Pick a better sounding voice (adjust this to what you find available in your browser)
+        selectedVoice = voices.find(v => 
+            v.name.includes("Google US English") || 
+            v.name.includes("Microsoft") || 
+            v.name.toLowerCase().includes("natural")
+        ) || voices.find(v => v.lang === "en-US"); // fallback
+        
+        console.log("Selected voice:", selectedVoice?.name || "Default");
+    }
+
+    speechSynthesis.onvoiceschanged = loadVoices;
+
+    function playNextSentence() {
+        let selectedVoice = null;
+        if (currentSentenceIndex >= sentences.length) {
+            setMessage("✅ All sentences played!");
+            document.getElementById("progress-bar").style.width = "100%";
+            document.getElementById("progress-bar").textContent = "100%";
+            isSpeaking = false;
+            pauseButton.disabled = true;
+            return;
+        }
+
+        if (isPaused) return;
+
+        const sentence = sentences[currentSentenceIndex];
+        
+        // Display current sentence
+        document.getElementById("sentence-box").innerHTML = `<strong></strong>`;
+        setMessage(`Playing sentence ${currentSentenceIndex + 1}/${sentences.length}...`);
+
+        // Update progress bar
+        const percent = Math.round(((currentSentenceIndex) / sentences.length) * 100);
+        const progressBar = document.getElementById("progress-bar");
+        progressBar.style.width = percent + "%";
+        progressBar.textContent = percent + "%";
+
+        const utterance = new SpeechSynthesisUtterance(sentence);
+        utterance.lang = "en-US";
+        if (selectedVoice) utterance.voice = selectedVoice;
+        utterance.pitch = 1.05;
+        utterance.rate = 0.95;
+
+
+        utterance.onend = () => {
+            if (!isPaused) {
+                currentSentenceIndex++;
+                queueTimer = setTimeout(playNextSentence, 1500);
+            }
+        };
+
+        window.speechSynthesis.speak(utterance);
+    }        
+
+    function togglePause() {
+        if (!isSpeaking) return;
+
+        if (!isPaused) {
+            isPaused = true;
+            window.speechSynthesis.pause();
+            clearTimeout(queueTimer);
+            setMessage("⏸ Paused");
+            pauseButton.textContent = "▶ Resume";
+        } else {
+            isPaused = false;
+            window.speechSynthesis.resume();
+            setMessage(`Resumed at sentence ${currentSentenceIndex + 1}/${sentences.length}...`);
+            pauseButton.textContent = "⏸ Pause";
+            if (currentSentenceIndex < sentences.length && !window.speechSynthesis.speaking) {
+                queueTimer = setTimeout(playNextSentence, 1000);
+            }
+        }
+    }
+
+    playButton.addEventListener('click', speakAllSequentially);
+    pauseButton.addEventListener('click', togglePause);
+
+    // Initial load check
+    document.addEventListener('DOMContentLoaded', () => {
+        const currentPath = window.location.pathname;
+        if (currentPath.includes('listen_write')) {
+            pdfContainer.style.display = 'none';
+            listenWriteContainer.style.display = 'flex';
+            mobileLink.href = '#';
+            mobileLink.textContent = 'Listen and Write not available on mobile';
+            const urlPath = "{% static 'lessons/' %}{{ lesson_number }}.json";
+            fetchSentences(urlPath);
+        }
+    });
+
+    // Prevent form submit inside listening
+    // const form = document.querySelector('form');
+    // form.addEventListener('submit', function(event) {
+    //     if (window.location.pathname.includes('listen_write')) {
+    //         event.preventDefault();
+    //         setMessage("❌ Cannot submit PDF in Listen and Write mode.");
+    //     }
+    // });
+
+    function setMessage(text) {
+        document.getElementById('message').textContent = text;
+    }
+</script>
 </body>
 </html>

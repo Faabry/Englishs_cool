@@ -1,0 +1,40 @@
+{
+    "There's a long time: Means that a significant amount of time has passed.": [
+        "(Present) There's a long time before the meeting starts.",
+        "(Simple Past) There was a long time between our last two meetings.",
+        "(Question) Is there a long time until the deadline?",
+        "(Negative) There isn't a long time left to complete the project."
+    ],
+    "I got to go | I have to go: Means that I have to leave or depart.": [
+        "(Present) I got to go to the store.",
+        "(Simple Past) You got to go home early.",
+        "(Question) Did I got to go to the party?",
+        "(Negative) I didn't got to go to the meeting.",
+        "(Imperative) Got to go now!"
+        
+    ],
+    "How are you doing?: A common greeting used to ask someone about their well-being or current state.": [
+        "(Present) How are you doing today?",
+        "(Simple Past) How were you doing last week?",
+        "(Question) How are you doing with your new job?",
+        "(Negative) I am not sure how you are doing lately."
+    ],
+    "Are you going to...?: A question used to inquire about someone's plans or intentions to do something in the future.": [
+        "(Present) Are you going to the party tonight?",
+        "(Simple Past) Were you going to the concert last weekend?",
+        "(Question) Are you going to finish your homework?",
+        "(Negative) I am not sure if you are going to join us."
+    ],
+    "Sounds good/great: An expression used to indicate agreement or approval of a suggestion or plan.": [
+        "(Present) That sounds good to me.",
+        "(Simple Past) The idea sounded great yesterday.",
+        "(Question) Does that sound good to you?",
+        "(Negative) It doesn't sound good at all."
+    ],
+    "So so | More or less: Expressions used to indicate that something is average or mediocre.": [
+        "(Present) The movie was so so.",
+        "(Simple Past) The food was more or less okay.",
+        "(Question) How was the trip? Was it so so?",
+        "(Negative) It wasn't more or less exciting."
+    ]
+}
