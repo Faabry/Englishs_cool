@@ -45,41 +45,52 @@
             perspective: 800px;            
         }
         .flashcard {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            left: 0;
-            top: 20px;
-            background: linear-gradient(135deg, #366092 0%, #1c3f6a 100%);            
-            border-radius: 12px;
-            box-shadow: 0 2px 8px #0002;
-            transition: transform 0.5s, opacity 0.5s;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 1.5rem;
-            font-size: 1.1rem;
-            opacity: 1;
-            z-index: 1;
-            
-        }
-        .flashcard.behind {
-            opacity: 0.5;
-            transform: scale(0.95) translateY(20px);
-            z-index: 0;
-        }
-        .flashcard.front {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-            z-index: 2;
-        }
-        .flashcard.out {
-            opacity: 0;
-            pointer-events: none;
-            transform: scale(0.8) translateY(60px);
-            z-index: 0;
-        }
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 20px;
+    background: linear-gradient(135deg, #366092 0%, #1c3f6a 100%);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px #0002;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem;
+    font-size: 1.1rem;
+    opacity: 1;
+    z-index: 1;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+/* Base stack layers */
+.flashcard.front {
+    z-index: 3;
+    transform: translateY(0) scale(1);
+}
+.flashcard.behind {
+    z-index: 2;
+    transform: translateY(10px) scale(0.97);
+    opacity: 0.9;
+}
+.flashcard.out {
+    z-index: 1;
+    transform: translateY(20px) scale(0.95);
+    opacity: 0.7;
+}
+
+/* Slide out to left */
+.flashcard.swipe-left {
+    transform: translateX(-120%) rotate(-5deg);
+    opacity: 0;
+}
+
+/* Slide in from left (previous button) */
+.flashcard.swipe-right-in {
+    animation: swipeRightIn 0.5s ease forwards;
+}
+
         .flashcard-desc {
             font-weight: bold;
             color: aliceblue;
@@ -112,6 +123,20 @@
             border-top: 1px solid #ffffff33;
             margin: 0.5rem 0;
         }
+
+@keyframes swipeRightIn {
+    from {
+        transform: translateX(-120%) rotate(-5deg);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+
+
         .listen-write-section h2 { margin-bottom: 20px; }
         .listen-write-section .controls { display: flex; gap: 10px; margin-top: 20px; }
 
@@ -167,7 +192,7 @@
                     </div>
                 </div>
                 <!-- Mobile PDF message -->
-                <div class="mobile-pdf-message">
+                <div class="mobile-pdf-message" id="mobile-pdf-message">
                     <p>Para uma experência ainda melhor, recomendamos utilizar um computador, mas se estiver pelo celular, basta clicar no botão abaixo para acessar o PDF:</p>
                     <a id="mobile-link" href="{% static pdf_url %}" target="_blank" class="btn btn-primary">Open PDF Lesson</a>
                 </div>                
@@ -197,24 +222,18 @@
                     {% endfor %}
                 </ul>
             </div>
-            <!-- Mobile Topics Dropdown -->
             <div class="d-lg-none text-center my-3">
-                <div class="dropdown">
-                    <button class="col-11 btn btn-outline-primary dropdown-toggle" type="button" id="topicsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        Lesson {{ lesson_number }}
-                    </button>
-                    <ul class="col-11 dropdown-menu" aria-labelledby="topicsDropdown">
-                        {% for topic_data in topics %}
-                            <li>
-                                <a class="dropdown-item {% if topic_data.path == current_topic_path %}active{% endif %}"
-                                href="javascript:void(0);" onclick="loadPDF('{{ topic_data.url }}', event)">
-                                    {{ topic_data.name }}
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
+            <select class="form-select" style="width: 90%; align-items: center; margin-left: auto; margin-right: auto;"
+                    onchange="loadPDF(this.value, event)">
+                <option selected>Lesson {{ lesson_number }}</option>
+                {% for topic_data in topics %}
+                    <option value="{{ topic_data.url }}" 
+                        {% if topic_data.path == current_topic_path %}selected{% endif %}>
+                        {{ topic_data.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
         </div>
     </main>
     {% include "game/footer.html" %}
@@ -223,6 +242,7 @@
     <script>
     const pdfContainer = document.getElementById('pdf-container');
     const listenWriteContainer = document.getElementById('listen-write-container');
+    const mobilePDFMessage = document.getElementById('mobile-pdf-message');
     const mobileLink = document.getElementById('mobile-link');
     const playButton = document.getElementById('play-button');
     const pauseButton = document.getElementById('pause-button');
@@ -243,13 +263,11 @@
                 vocabCards = [];
 
                 for (const desc in data) {
-                    // Split the key into "title" and "definition"
                     let [title, definition] = desc.split(": ");
                     title = title.trim();
                     definition = (definition || "").trim();
 
                     data[desc].forEach(example => {
-                        // Split the example into label and sentence
                         const match = example.match(/^\(([^)]+)\)\s*(.*)$/);
                         let label = "";
                         let sentence = example;
@@ -281,60 +299,87 @@
             return;
         }
 
-        for (let i = 0; i < vocabCards.length; i++) {
-            let className = "flashcard";
-            if (i === currentVocabIndex) className += " front";
-            else if (i === (currentVocabIndex + 1) % vocabCards.length) className += " behind";
-            else if (i === (currentVocabIndex - 1 + vocabCards.length) % vocabCards.length) className += " behind";
-            else className += " out";
+        // Render only the current card and the next few for visual stacking
+        vocabCards.forEach((card, i) => {
+            let position = (i - currentVocabIndex + vocabCards.length) % vocabCards.length;
+            let className =
+                position === 0 ? "flashcard front" :
+                position === 1 ? "flashcard behind" :
+                "flashcard out";
 
             stack.innerHTML += `
                 <div class="${className}">
-                    <div class="flashcard-title"><strong>${vocabCards[i].title}</strong></div>
-                    <div class="flashcard-definition">${vocabCards[i].definition}</div>
+                    <div class="flashcard-title"><strong>${card.title}</strong></div>
+                    <div class="flashcard-definition">${card.definition}</div>
                     <hr class="flashcard-divider" />
-                    <div class="flashcard-label"><em>${vocabCards[i].label}</em></div>
-                    <div class="flashcard-sentence">${vocabCards[i].sentence}</div>
-                    <div class="text-center mt-2" style="color: #f0f0f0; font-size: 0.9rem;">
-                        <span>${i + 1} / ${vocabCards.length}</span>
+                    <div class="flashcard-label"><em>${card.label}</em></div>
+                    <div class="flashcard-sentence">${card.sentence}</div>
+                    <div class="text-center mt-2" style="font-size: 0.85rem; color: #f0f0f0;">
+                        <span>${(currentVocabIndex + 1)} / ${vocabCards.length}</span>
                     </div>
                 </div>
             `;
-        }
+        });
     }
 
+    // ✅ Animate Next
+    document.getElementById("next-flashcard").onclick = function () {
+        if (vocabCards.length <= 1) return;
+        const stack = document.getElementById("flashcard-stack");
+        const frontCard = stack.querySelector(".flashcard.front");
+
+        // Animate out
+        frontCard.classList.add("swipe-left");
+
+        setTimeout(() => {
+            // Move to next index
+            currentVocabIndex = (currentVocabIndex + 1) % vocabCards.length;
+            renderFlashcardStack();
+        }, 500);
+    };
+
+    // ✅ Animate Previous
     document.getElementById("prev-flashcard").onclick = function () {
-        if (vocabCards.length === 0) return;
+        if (vocabCards.length <= 1) return;
+
+        // Move to previous index
         currentVocabIndex = (currentVocabIndex - 1 + vocabCards.length) % vocabCards.length;
         renderFlashcardStack();
-    };
 
-    document.getElementById("next-flashcard").onclick = function () {
-        if (vocabCards.length === 0) return;
-        currentVocabIndex = (currentVocabIndex + 1) % vocabCards.length;
-        renderFlashcardStack();
+        const stack = document.getElementById("flashcard-stack");
+        const newFront = stack.querySelector(".flashcard.front");
+        newFront.classList.add("swipe-right-in");
     };
-
 
     function loadPDF(url, event) {
         pdfContainer.style.display = 'none';
         listenWriteContainer.style.display = 'none';
+        mobilePDFMessage.style.display = 'none';
         document.getElementById("vocab-container").style.display = "none";
-        document.getElementById("submit-lesson-container").style.display = "none";
-        // Decide what to show
-        if (url.includes(".pdf")) {
-            pdfContainer.style.display = 'block';
+        document.getElementById("submit-lesson-container").style.display = "none";        
+        
+        if (url.includes(".pdf") && window.innerWidth > 991) {
+            pdfContainer.style.display = 'block';            
             document.getElementById('pdfViewer').src = url;
+
+        } else if (url.includes(".pdf") && window.innerWidth <= 991) {
+            mobilePDFMessage.style.display = 'block';
+            mobileLink.href = url;
+            mobileLink.textContent = 'Open PDF Lesson';
+
         } else if (url.includes("/vocabulary/")) {
-            document.getElementById("vocab-container").style.display = "block";
+            document.getElementById("vocab-container").style.display = "block";            
             loadVocabFlashcards(url);
-        } else if (url.includes(".json")) {
+
+        } else if (url.includes(".json")) {          
+            
             listenWriteContainer.style.display = 'flex';
             fetchSentences(url);
+            
         } else if (url.includes("/submit/")) {
             document.getElementById("submit-lesson-container").style.display = "block";
         }
-        // Active sidebar styling
+        
         document.querySelectorAll('.topic-item').forEach(item => item.classList.remove('active'));
         event.target.classList.add('active');
     }
