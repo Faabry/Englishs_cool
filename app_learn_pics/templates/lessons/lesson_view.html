@@ -36,6 +36,58 @@
             border-width: 1px;
             margin-top: -1%;
         }
+        .flashcard-stack {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            height: 220px;
+            margin: 0 auto;
+            perspective: 800px;
+        }
+        .flashcard {
+            position: absolute;
+            width: 100%;
+            height: 180px;
+            left: 0;
+            top: 20px;
+            background: #366092;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px #0002;
+            transition: transform 0.5s, opacity 0.5s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            font-size: 1.1rem;
+            opacity: 1;
+            z-index: 1;
+        }
+        .flashcard.behind {
+            opacity: 0.5;
+            transform: scale(0.95) translateY(20px);
+            z-index: 0;
+        }
+        .flashcard.front {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            z-index: 2;
+        }
+        .flashcard.out {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.8) translateY(60px);
+            z-index: 0;
+        }
+        .flashcard-desc {
+            font-weight: bold;
+            color: aliceblue;
+            margin-bottom: 0.5rem;
+        }
+        .flashcard-example {
+            font-size: 1.05rem;
+            color: aliceblue;
+        }
         .listen-write-section h2 { margin-bottom: 20px; }
         .listen-write-section .controls { display: flex; gap: 10px; margin-top: 20px; }
 
@@ -54,54 +106,50 @@
 </head>
 <body style="background-color: aliceblue">
     {% include "game/navbar.html" %}
-    <main class="container-fluid flex-grow-1" style="background-color: #e3f2fd; padding: 0;">
+    <main class="container-fluid flex-grow-1" style="padding: 0;">
         <div class="row g-0" style="height: 100%;">
             <!-- Main Content Area -->
-            <div class="col-lg-9 col-12 p-3">
-                <span class="title">
-                    <!-- <span style="color: #000;">Lesson</span> <span style="color: #ff0000;">{{ lesson_number }}</span> -->
-                    <span style="color: #e3f2fd;">.</span>
-                </span>
-                <!-- Desktop/tablet: show PDF -->
-                <div id="pdf-container" class="pdf-container">
-                    <embed id="pdfViewer" src="{% static pdf_url %}" type="application/pdf" width="100%" height="100%" />
-                </div>
-                <div id="listen-write-container" class="listen-write-section shadow-sm p-4">
-                    <h3 class="mb-3 title_listen_write">🎧 Listen & Write</h3>
-                    <p class="text-muted">Listen to each sentence and practice writing it down.</p>
-
-                    <!-- Player area -->
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <button id="play-button" class="btn btn-primary">
-                        ▶ Play All
-                        </button>
-                        <button id="pause-button" class="btn btn-secondary" disabled>
-                        ⏸ Pause
-                        </button>
-                    </div>
-
-                    <!-- Progress -->
-                    <div class="progress mb-3" style="width: 85%;">
-                        <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%">
-                        0%
-                        </div>
-                    </div>
-
-                    <!-- Sentence display -->
-                    <div class="p-3 bg-light rounded" id="sentence-box" style="background-color: #e3f2fd;">
-                        <span class="text-muted">...</span>
-                    </div>
-
-                    <!-- Status -->
-                    <p id="message" class="mt-3 text-info"></p>
-                </div>
-
-                <!-- Mobile PDF message -->
-                <div class="mobile-pdf-message">
-                    <p>Para uma experência ainda melhor, recomendamos utilizar um computador, mas se estiver pelo celular, basta clicar no botão abaixo para acessar o PDF:</p>
-                    <a id="mobile-link" href="{% static pdf_url %}" target="_blank" class="btn btn-primary">Open PDF Lesson</a>
-                </div>
-            </div>
+            <!-- ...existing code... -->
+<div class="col-lg-9 col-12 p-3">
+    <span class="title">
+        <span style="color: #e3f2fd;">.</span>
+    </span>
+    <!-- Desktop/tablet: show PDF -->
+    <div id="pdf-container" class="pdf-container">
+        <embed id="pdfViewer" src="{% static pdf_url %}" type="application/pdf" width="100%" height="100%" />
+    </div>
+    <!-- Listen & Write Section -->
+    <div id="listen-write-container" class="listen-write-section shadow-sm p-4">
+        <h3 class="mb-3 title_listen_write">🎧 Listen & Write</h3>
+        <p class="text-muted">Listen to each sentence and practice writing it down.</p>
+        <div class="controls mb-3">
+            <button id="play-button" class="btn btn-primary me-2">▶ Play All</button>
+            <button id="pause-button" class="btn btn-secondary" disabled>⏸ Pause</button>
+        </div>
+        <div id="message" class="mb-2"></div>
+        <div id="sentence-box" class="mb-2"></div>
+        <div class="progress" style="height: 24px; width: 50%;">
+            <div id="progress-bar" class="progress-bar" style="width: 0%;">0%</div>
+        </div>
+    </div>
+    <!-- Vocabulary Flashcards Section -->
+    <div id="vocab-container" class="listen-write-section shadow-sm p-4" style="height:80vh; background:#fff; border:1px solid #366092; border-radius:10px; display:none;">
+        <h3 class="mb-3 title_listen_write">📖 Vocabulary</h3>
+        <p class="text-muted">Study and review key vocabulary for this lesson.</p>
+        <div id="flashcard-stack" class="flashcard-stack"></div>
+        <div class="mt-3">
+            <button id="prev-flashcard" class="btn btn-outline-primary me-2">Previous</button>
+            <button id="next-flashcard" class="btn btn-outline-primary">Next</button>
+        </div>
+    </div>
+    <!-- Mobile PDF message -->
+    <div class="mobile-pdf-message">
+        <p>Para uma experência ainda melhor, recomendamos utilizar um computador, mas se estiver pelo celular, basta clicar no botão abaixo para acessar o PDF:</p>
+        <a id="mobile-link" href="{% static pdf_url %}" target="_blank" class="btn btn-primary">Open PDF Lesson</a>
+    </div>
+    <!-- ...rest of code... -->
+</div>
+<!-- ...existing code... -->
 
             <!-- Topics Sidebar Desktop -->
             <div class="container col-lg-3 d-none d-lg-block topics-sidebar"
@@ -166,36 +214,84 @@
     let isPaused = false;
     let queueTimer = null;
 
-    function loadPDF(url, event) {
-        const isListenWrite = url.includes('.json');
-        
-        if (isListenWrite) {
-            pdfContainer.style.display = 'none';
-            listenWriteContainer.style.display = 'flex';
-            //mobileLink.href = '#';
-            //mobileLink.textContent = 'Listen and Write not available on mobile';
-            document.querySelector('.mobile-pdf-message').style.display = 'none'; // ✅ Hide message
-            fetchSentences(url);
-        } else if (window.innerWidth <= 991) {
-            pdfContainer.style.display = 'none';
-            listenWriteContainer.style.display = 'none';
-            mobileLink.href = url;
-            mobileLink.textContent = 'Open PDF Lesson';
-            document.querySelector('.mobile-pdf-message').style.display = 'block'; // ✅ Show message
-            document.querySelector('.pdf-container').style.display = 'none'; // ✅ Show message
-        } else {
-            pdfContainer.style.display = 'block';
-            listenWriteContainer.style.display = 'none';
-            const pdfViewer = document.getElementById('pdfViewer');
-            pdfViewer.src = url;
-            mobileLink.href = url;
-            mobileLink.textContent = 'Open Content';
-            window.speechSynthesis.cancel();
-            isSpeaking = false;
-            // document.querySelector('.mobile-pdf-message').style.display = 'block'; // ✅ Show message
-            // document.querySelector('.pdf-container').style.display = 'none'; // ✅ Show message
-        }
+    let vocabList = [];    
 
+    let vocabData = [];
+    let vocabDesc = "";
+    let vocabCards = [];
+
+    function loadVocabFlashcards(url) {
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                // Flatten the JSON into a list of {desc, example}
+                vocabCards = [];
+                for (const desc in data) {
+                    data[desc].forEach(example => {
+                        vocabCards.push({ desc, example });
+                    });
+                }
+                currentVocabIndex = 0;
+                renderFlashcardStack();
+            })
+            .catch(() => {
+                document.getElementById("flashcard-stack").innerHTML = "<div>No vocabulary found for this lesson.</div>";
+            });
+    }
+
+    function renderFlashcardStack() {
+        const stack = document.getElementById("flashcard-stack");
+        stack.innerHTML = "";
+        if (vocabCards.length === 0) {
+            stack.innerHTML = "<div>No vocabulary found for this lesson.</div>";
+            return;
+        }
+        for (let i = 0; i < vocabCards.length; i++) {
+            let className = "flashcard";
+            if (i === currentVocabIndex) className += " front";
+            else if (i === (currentVocabIndex + 1) % vocabCards.length) className += " behind";
+            else if (i === (currentVocabIndex - 1 + vocabCards.length) % vocabCards.length) className += " behind";
+            else className += " out";
+            stack.innerHTML += `
+                <div class="${className}">
+                    <div class="flashcard-desc">${vocabCards[i].desc}</div>
+                    <div class="flashcard-example">${vocabCards[i].example}</div>
+                    <div class="text-center mt-2">
+                        <span>${i + 1} / ${vocabCards.length}</span>
+                    </div>
+                </div>
+            `;
+        }
+    }
+
+    document.getElementById("prev-flashcard").onclick = function() {
+        if (vocabCards.length === 0) return;
+        currentVocabIndex = (currentVocabIndex - 1 + vocabCards.length) % vocabCards.length;
+        renderFlashcardStack();
+    };
+    document.getElementById("next-flashcard").onclick = function() {
+        if (vocabCards.length === 0) return;
+        currentVocabIndex = (currentVocabIndex + 1) % vocabCards.length;
+        renderFlashcardStack();
+    };
+
+    function loadPDF(url, event) {
+        pdfContainer.style.display = 'none';
+        listenWriteContainer.style.display = 'none';
+        document.getElementById("vocab-container").style.display = "none";
+        // Decide what to show
+        if (url.includes(".pdf")) {
+            pdfContainer.style.display = 'block';
+            document.getElementById('pdfViewer').src = url;
+        } else if (url.includes("/vocabulary/")) {
+            // Vocabulary JSON file
+            document.getElementById("vocab-container").style.display = "block";
+            loadVocabFlashcards(url);
+        } else if (url.includes(".json")) {
+            listenWriteContainer.style.display = 'flex';
+            fetchSentences(url);
+        }
+        // Active sidebar styling
         document.querySelectorAll('.topic-item').forEach(item => item.classList.remove('active'));
         event.target.classList.add('active');
     }

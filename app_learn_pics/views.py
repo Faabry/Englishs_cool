@@ -261,7 +261,7 @@ def word_battleship(request):
         'col_headers': col_headers,
     })
 
-
+@login_required
 def hangman(request):
     import random  # Ensure random is imported
 
@@ -375,13 +375,6 @@ def hangman(request):
     })
 
 @login_required
-# def lesson_view(request, lesson_number):
-#     # Build static URL for the PDF
-#     pdf_url = f'/static/lessons/{lesson_number}.pdf'
-#     return render(request, 'lessons/lesson_view.html', {
-#         'lesson_number': lesson_number,
-#         'pdf_url': pdf_url,
-#     })
 def lesson_view(request, lesson_number, topic=None):
     # A dictionary to map topics to their file paths
     # You can add more topics here as you create more PDFs
@@ -389,6 +382,7 @@ def lesson_view(request, lesson_number, topic=None):
         'lesson': f'/lessons/{lesson_number}.pdf',
         'homework': f'homeworks/{lesson_number}.pdf',
         'listening': f'lessons/{lesson_number}.json',
+        'vocab': 'vocab',
     }
 
     # Determine which PDF to load based on the URL topic parameter
@@ -403,6 +397,7 @@ def lesson_view(request, lesson_number, topic=None):
         {'name': 'Lesson', 'url': f'/static/lessons/{lesson_number}.pdf', 'path': topic_map['lesson']},
         {'name': 'Homework', 'url': f'/static/homeworks/{lesson_number}.pdf', 'path': topic_map['homework']},
         {'name': 'Listening', 'url': f'/static/lessons/{lesson_number}.json', 'path': topic_map['listening']},
+        {'name': 'Vocabulary', 'url': f'/static/lessons/vocabulary/{lesson_number}.json', 'path': topic_map['vocab']},
     ]
 
     return render(request, 'lessons/lesson_view.html', {
@@ -447,3 +442,20 @@ def privacy_policy(request):
 @login_required
 def support(request):
     return render(request, 'game/support.html')
+
+@login_required
+def profile_view(request):
+    user = request.user
+    # Example: Fetch user profile info
+    profile = getattr(user, 'profile', None)
+    # Example: Fetch notes, favorites, progress (customize as needed)
+    notes = getattr(profile, 'notes', '')
+    favorites = getattr(profile, 'favorite_lessons', [])
+    progress = getattr(profile, 'progress', {})
+    return render(request, 'user/profile.html', {
+        'user': user,
+        'profile': profile,
+        'notes': notes,
+        'favorites': favorites,
+        'progress': progress,
+    })
