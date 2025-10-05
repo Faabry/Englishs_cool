@@ -1,0 +1,28 @@
+{
+    "Hope: Means to desire or wish for something.": [
+        "(Present) I hope you have a great day.",
+        "(Simple Past) She hoped for a better future.",
+        "(Question) Do you hope to travel this year?",
+        "(Negative) I don't hope for anything special."
+    ],
+    "Come along: Means to accompany or join someone.": [
+        "(Present) You come along with your friend.",
+        "(Simple Past) I came along to the party.",
+        "(Question) Do you come along to the meetings?",
+        "(Negative) I don't come along to the events.",
+        "(Imperative) Come along and join us."        
+    ],
+    "Have fun: Means to enjoy oneself or have a good time.": [
+        "(Present) I have fun at the amusement park.",
+        "(Simple Past) They had fun at the beach.",
+        "(Question) Do you have fun on weekends?",
+        "(Negative) I don't have fun when I'm bored.",
+        "(Imperative) Have fun and enjoy your day."
+    ],
+    "Just like you: Means in the same way as you or similar to you.": [
+        "(Present) I feel just like you do.",
+        "(Simple Past) She acted just like you did.",
+        "(Question) Do you think just like me?",
+        "(Negative) I don't think just like you."
+    ]
+}

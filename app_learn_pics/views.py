@@ -398,6 +398,7 @@ def lesson_view(request, lesson_number, topic=None):
         {'name': 'Homework', 'url': f'/static/homeworks/{lesson_number}.pdf', 'path': topic_map['homework']},
         {'name': 'Listening', 'url': f'/static/lessons/{lesson_number}.json', 'path': topic_map['listening']},
         {'name': 'Vocabulary', 'url': f'/static/lessons/vocabulary/{lesson_number}.json', 'path': topic_map['vocab']},
+        {'name': 'Submit for Correction', 'url': f'/lessons/submit/{lesson_number}', 'path': 'submit'},
     ]
 
     return render(request, 'lessons/lesson_view.html', {

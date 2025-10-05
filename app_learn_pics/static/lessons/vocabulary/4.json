@@ -1,0 +1,62 @@
+{
+    "To drink: refers to an action of consuming liquids.": [
+        "(Present) I drink coffee with my wife every morning.",
+        "(Simple Past) You drank orange juice and tea.",
+        "(Question) Do you drink water and I drink orange juice everyday?",
+        "(Negative) I don't drink soda and you don't drink milk.",
+        "(Imperative) Drink water and drink juice.",
+        "(Future) I will drink milk and you will drink juice.",
+        "(Present Continuous) I am drinking juice and you are drinking water.",
+        "(Present Perfect) I have drunk juice and you have drunk water."
+    ],
+    "To eat: refers to an action of consuming food.": [
+        "(Present) You eat fish with your friend.",
+        "(Simple Past) I ate papaya and I drank soda.",
+        "(Question) Do you eat rice and I eat beans everyday?",
+        "(Negative) I don't eat meat and you don't eat fish.",
+        "(Imperative) Eat your vegetables and eat your fruit.",
+        "(Future) I will eat pasta and you will eat pizza.",
+        "(Present Continuous) I am eating salad and you are eating soup.",
+        "(Present Perfect) I have eaten sushi and you have eaten tempura."
+    ],
+    "To speak: refers to the action of communicating using words.": [
+        "(Present) I speak English with my colleagues.",
+        "(Simple Past) She spoke to her teacher yesterday.",
+        "(Question) Do you speak Spanish and I speak French?",
+        "(Negative) I don't speak German and you don't speak Italian.",
+        "(Imperative) Speak clearly and speak slowly.",
+        "(Future) I will speak at the conference next week.",
+        "(Present Continuous) I am speaking with my manager right now.",
+        "(Present Perfect) I have spoken to the client and you have spoken to the team."
+    ],
+    "To study: refers to the action of learning or reviewing material.": [
+        "(Present) You study math and science at school.",
+        "(Simple Past) They studied history and geography last semester.",
+        "(Question) Do you study English and I study Spanish?",
+        "(Negative) I don't study art and you don't study music.",
+        "(Imperative) Study hard and study regularly.",
+        "(Future) I will study for the exam tomorrow.",
+        "(Present Continuous) I am studying for my finals this week.",
+        "(Present Perfect) I have studied biology and you have studied chemistry."
+    ],
+    "To play: refers to the action of engaging in recreational activities or games.": [
+        "(Present) He plays soccer with his friends.",
+        "(Simple Past) We played basketball last weekend.",
+        "(Question) Do you play tennis and I play volleyball?",
+        "(Negative) I don't play golf and you don't play baseball.",
+        "(Imperative) Play fair and play with enthusiasm.",
+        "(Future) I will play video games tonight.",
+        "(Present Continuous) I am playing chess with my brother right now.",
+        "(Present Perfect) I have played badminton and you have played table tennis."
+    ],
+    "To work: refers to the action of performing tasks or duties, typically related to a job or profession.": [
+        "(Present) I work in a bank and you work in a school.",
+        "(Simple Past) She worked on the project last month.",
+        "(Question) Do you work from home and I work in the office?",
+        "(Negative) I don't work on weekends and you don't work late.",
+        "(Imperative) Work diligently and work efficiently.",
+        "(Future) I will work on the report tomorrow.",
+        "(Present Continuous) I am working on a new assignment right now.",
+        "(Present Perfect) I have worked on several projects and you have worked on many tasks."
+    ]
+}

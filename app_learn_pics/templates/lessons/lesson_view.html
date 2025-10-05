@@ -42,15 +42,15 @@
             max-width: 400px;
             height: 220px;
             margin: 0 auto;
-            perspective: 800px;
+            perspective: 800px;            
         }
         .flashcard {
             position: absolute;
             width: 100%;
-            height: 180px;
+            height: 100%;
             left: 0;
             top: 20px;
-            background: #366092;
+            background: linear-gradient(135deg, #366092 0%, #1c3f6a 100%);            
             border-radius: 12px;
             box-shadow: 0 2px 8px #0002;
             transition: transform 0.5s, opacity 0.5s;
@@ -62,6 +62,7 @@
             font-size: 1.1rem;
             opacity: 1;
             z-index: 1;
+            
         }
         .flashcard.behind {
             opacity: 0.5;
@@ -88,6 +89,29 @@
             font-size: 1.05rem;
             color: aliceblue;
         }
+        .flashcard-title {
+            font-size: 1.25rem;            
+            color: #fff;            
+        }
+        .flashcard-definition {
+            font-size: 1rem;            
+            color: #f0f0f0;
+            margin-bottom: 0.5rem;
+        }
+        .flashcard-label {
+            font-size: 1rem;            
+            color: #d0d0d0;            
+        }
+        .flashcard-sentence {
+            font-size: 1.1rem;            
+            color: #e0e0e0;            
+            text-align: center;
+        }
+        .flashcard-divider {
+            width: 80%;
+            border-top: 1px solid #ffffff33;
+            margin: 0.5rem 0;
+        }
         .listen-write-section h2 { margin-bottom: 20px; }
         .listen-write-section .controls { display: flex; gap: 10px; margin-top: 20px; }
 
@@ -104,53 +128,62 @@
         }
     </style>
 </head>
-<body style="background-color: aliceblue">
+<body style="background-color: #e3f2fd;">
     {% include "game/navbar.html" %}
     <main class="container-fluid flex-grow-1" style="padding: 0;">
         <div class="row g-0" style="height: 100%;">
             <!-- Main Content Area -->
-            <!-- ...existing code... -->
-<div class="col-lg-9 col-12 p-3">
-    <span class="title">
-        <span style="color: #e3f2fd;">.</span>
-    </span>
-    <!-- Desktop/tablet: show PDF -->
-    <div id="pdf-container" class="pdf-container">
-        <embed id="pdfViewer" src="{% static pdf_url %}" type="application/pdf" width="100%" height="100%" />
-    </div>
-    <!-- Listen & Write Section -->
-    <div id="listen-write-container" class="listen-write-section shadow-sm p-4">
-        <h3 class="mb-3 title_listen_write">🎧 Listen & Write</h3>
-        <p class="text-muted">Listen to each sentence and practice writing it down.</p>
-        <div class="controls mb-3">
-            <button id="play-button" class="btn btn-primary me-2">▶ Play All</button>
-            <button id="pause-button" class="btn btn-secondary" disabled>⏸ Pause</button>
-        </div>
-        <div id="message" class="mb-2"></div>
-        <div id="sentence-box" class="mb-2"></div>
-        <div class="progress" style="height: 24px; width: 50%;">
-            <div id="progress-bar" class="progress-bar" style="width: 0%;">0%</div>
-        </div>
-    </div>
-    <!-- Vocabulary Flashcards Section -->
-    <div id="vocab-container" class="listen-write-section shadow-sm p-4" style="height:80vh; background:#fff; border:1px solid #366092; border-radius:10px; display:none;">
-        <h3 class="mb-3 title_listen_write">📖 Vocabulary</h3>
-        <p class="text-muted">Study and review key vocabulary for this lesson.</p>
-        <div id="flashcard-stack" class="flashcard-stack"></div>
-        <div class="mt-3">
-            <button id="prev-flashcard" class="btn btn-outline-primary me-2">Previous</button>
-            <button id="next-flashcard" class="btn btn-outline-primary">Next</button>
-        </div>
-    </div>
-    <!-- Mobile PDF message -->
-    <div class="mobile-pdf-message">
-        <p>Para uma experência ainda melhor, recomendamos utilizar um computador, mas se estiver pelo celular, basta clicar no botão abaixo para acessar o PDF:</p>
-        <a id="mobile-link" href="{% static pdf_url %}" target="_blank" class="btn btn-primary">Open PDF Lesson</a>
-    </div>
-    <!-- ...rest of code... -->
-</div>
-<!-- ...existing code... -->
-
+                    <!-- ...existing code... -->
+            <div class="col-lg-9 col-12 p-3">
+                <span class="title">
+                    <span style="color: #e3f2fd;">.</span>
+                </span>
+                <!-- Desktop/tablet: show PDF -->
+                <div id="pdf-container" class="pdf-container">
+                    <embed id="pdfViewer" src="{% static pdf_url %}" type="application/pdf" width="100%" height="100%" />
+                </div>
+                <!-- Listen & Write Section -->
+                <div id="listen-write-container" class="listen-write-section shadow-sm p-4">
+                    <h3 class="mb-3 title_listen_write">🎧 Listen & Write</h3>
+                    <p class="text-muted">Listen to each sentence and practice writing it down.</p>
+                    <div class="controls mb-3">
+                        <button id="play-button" class="btn btn-primary me-2">▶ Play All</button>
+                        <button id="pause-button" class="btn btn-secondary" disabled>⏸ Pause</button>
+                    </div>
+                    <div id="message" class="mb-2"></div>
+                    <div id="sentence-box" class="mb-2"></div>
+                    <div class="progress" style="height: 24px; width: 50%;">
+                        <div id="progress-bar" class="progress-bar" style="width: 0%;">0%</div>
+                    </div>
+                </div>
+                <!-- Vocabulary Flashcards Section -->
+                <div id="vocab-container" class="listen-write-section shadow-sm p-4" style="height:80vh; background:#fff; border:1px solid #366092; border-radius:10px; display:none;">
+                    <h3 class="mb-3 title_listen_write">📖 Vocabulary</h3>
+                    <p class="text-muted">Study and review key vocabulary for this lesson.</p>
+                    <div id="flashcard-stack" class="flashcard-stack"></div>
+                    <div class="mt-5">
+                        <button id="prev-flashcard" class="btn btn-outline-primary me-2">Previous</button>
+                        <button id="next-flashcard" class="btn btn-outline-primary">Next</button>
+                    </div>
+                </div>
+                <!-- Mobile PDF message -->
+                <div class="mobile-pdf-message">
+                    <p>Para uma experência ainda melhor, recomendamos utilizar um computador, mas se estiver pelo celular, basta clicar no botão abaixo para acessar o PDF:</p>
+                    <a id="mobile-link" href="{% static pdf_url %}" target="_blank" class="btn btn-primary">Open PDF Lesson</a>
+                </div>                
+                <!-- Upload corrected PDF -->
+                <div id="submit-lesson-container" class="listen-write-section shadow-sm p-4" style="display:none; height:80vh;">
+                    <h3 class="mb-3 title_listen_write">✅ Submit for correction</h3>
+                    <p class="text-muted">If you want, you can send your lessons to be corrected.</p>
+                    <div class="d-flex flex-column justify-content-center align-items-center" style="height:60vh;">
+                        <form method="post" action="{% url 'submit_lesson' lesson_number %}" enctype="multipart/form-data" class="mt-4">
+                            {% csrf_token %}
+                            <input type="file" name="edited_pdf" accept="application/pdf" required>
+                            <button type="submit" class="btn btn-success">Submit for Correction</button>
+                        </form>
+                    </div>
+                </div>
+            </div>            
             <!-- Topics Sidebar Desktop -->
             <div class="container col-lg-3 d-none d-lg-block topics-sidebar"
                  style="border-radius: 10px; border-color: #366092; background-color: aliceblue; border-style: solid; margin-top: 5rem; height: 75%; border-width: 0.5px; width: 20%;">
@@ -182,20 +215,6 @@
                     </ul>
                 </div>
             </div>
-            <!-- Upload corrected PDF -->
-            <span style="background-color: aliceblue;">
-                <form class="container mt-5" method="post" action="{% url 'submit_lesson' lesson_number %}" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="row g-2">
-                        <div class="col-12 col-md-8">
-                            <input type="file" class="form-control" name="edited_pdf" accept="application/pdf" required>
-                        </div>
-                        <div class="col-12 col-md-4">
-                            <button type="submit" class="btn btn-success w-100">Send Lesson to Correction</button>
-                        </div>
-                    </div>
-                </form>
-            </span>
         </div>
     </main>
     {% include "game/footer.html" %}
@@ -214,49 +233,69 @@
     let isPaused = false;
     let queueTimer = null;
 
-    let vocabList = [];    
-
-    let vocabData = [];
-    let vocabDesc = "";
     let vocabCards = [];
+    let currentVocabIndex = 0;
 
     function loadVocabFlashcards(url) {
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                // Flatten the JSON into a list of {desc, example}
                 vocabCards = [];
+
                 for (const desc in data) {
+                    // Split the key into "title" and "definition"
+                    let [title, definition] = desc.split(": ");
+                    title = title.trim();
+                    definition = (definition || "").trim();
+
                     data[desc].forEach(example => {
-                        vocabCards.push({ desc, example });
+                        // Split the example into label and sentence
+                        const match = example.match(/^\(([^)]+)\)\s*(.*)$/);
+                        let label = "";
+                        let sentence = example;
+
+                        if (match) {
+                            label = match[1];
+                            sentence = match[2];
+                        }
+
+                        vocabCards.push({ title, definition, label, sentence });
                     });
                 }
+
                 currentVocabIndex = 0;
                 renderFlashcardStack();
             })
             .catch(() => {
-                document.getElementById("flashcard-stack").innerHTML = "<div>No vocabulary found for this lesson.</div>";
+                document.getElementById("flashcard-stack").innerHTML =
+                    "<div>No vocabulary found for this lesson.</div>";
             });
     }
 
     function renderFlashcardStack() {
         const stack = document.getElementById("flashcard-stack");
         stack.innerHTML = "";
+
         if (vocabCards.length === 0) {
             stack.innerHTML = "<div>No vocabulary found for this lesson.</div>";
             return;
         }
+
         for (let i = 0; i < vocabCards.length; i++) {
             let className = "flashcard";
             if (i === currentVocabIndex) className += " front";
             else if (i === (currentVocabIndex + 1) % vocabCards.length) className += " behind";
             else if (i === (currentVocabIndex - 1 + vocabCards.length) % vocabCards.length) className += " behind";
             else className += " out";
+
             stack.innerHTML += `
                 <div class="${className}">
-                    <div class="flashcard-desc">${vocabCards[i].desc}</div>
-                    <div class="flashcard-example">${vocabCards[i].example}</div>
-                    <div class="text-center mt-2">
+                    <div class="flashcard-title"><strong>${vocabCards[i].title}</strong></div>
+                    <div class="flashcard-definition">${vocabCards[i].definition}</div>
+                    <hr class="flashcard-divider" />
+                    <div class="flashcard-label"><em>${vocabCards[i].label}</em></div>
+                    <div class="flashcard-sentence">${vocabCards[i].sentence}</div>
+                    <div class="text-center mt-2" style="color: #f0f0f0; font-size: 0.9rem;">
                         <span>${i + 1} / ${vocabCards.length}</span>
                     </div>
                 </div>
@@ -264,32 +303,36 @@
         }
     }
 
-    document.getElementById("prev-flashcard").onclick = function() {
+    document.getElementById("prev-flashcard").onclick = function () {
         if (vocabCards.length === 0) return;
         currentVocabIndex = (currentVocabIndex - 1 + vocabCards.length) % vocabCards.length;
         renderFlashcardStack();
     };
-    document.getElementById("next-flashcard").onclick = function() {
+
+    document.getElementById("next-flashcard").onclick = function () {
         if (vocabCards.length === 0) return;
         currentVocabIndex = (currentVocabIndex + 1) % vocabCards.length;
         renderFlashcardStack();
     };
 
+
     function loadPDF(url, event) {
         pdfContainer.style.display = 'none';
         listenWriteContainer.style.display = 'none';
         document.getElementById("vocab-container").style.display = "none";
+        document.getElementById("submit-lesson-container").style.display = "none";
         // Decide what to show
         if (url.includes(".pdf")) {
             pdfContainer.style.display = 'block';
             document.getElementById('pdfViewer').src = url;
         } else if (url.includes("/vocabulary/")) {
-            // Vocabulary JSON file
             document.getElementById("vocab-container").style.display = "block";
             loadVocabFlashcards(url);
         } else if (url.includes(".json")) {
             listenWriteContainer.style.display = 'flex';
             fetchSentences(url);
+        } else if (url.includes("/submit/")) {
+            document.getElementById("submit-lesson-container").style.display = "block";
         }
         // Active sidebar styling
         document.querySelectorAll('.topic-item').forEach(item => item.classList.remove('active'));
