@@ -13,8 +13,7 @@
     {% include "game/navbar.html" %}
     <main class="container-fluid flex-grow-1" style="padding: 0;">
         <div class="row g-0" style="height: 100%;">
-            <!-- Main Content Area -->
-                    <!-- ...existing code... -->
+            <h3 class="lesson-title"> Lesson {{ lesson_number }}</h3>
             <div class="col-lg-9 col-12 p-3">
                 <span class="title">
                     <span style="color: #e3f2fd;">.</span>
@@ -48,7 +47,7 @@
                     </div>
                 </div>
                 <!-- Mobile PDF message -->
-                <div class="mobile-pdf-message" id="mobile-pdf-message">
+                <div class="mobile-pdf-message" id="mobile-pdf-message">                    
                     <p>Para uma experência ainda melhor, recomendamos utilizar um computador, mas se estiver pelo celular, basta clicar no botão abaixo para acessar o PDF:</p>
                     <a id="mobile-link" href="{% static pdf_url %}" target="_blank" class="btn btn-primary">Open PDF Lesson</a>
                 </div>                
@@ -79,16 +78,17 @@
                 </ul>
             </div>
             <div class="d-lg-none text-center my-3">
-            <select class="form-select" style="width: 90%; align-items: center; margin-left: auto; margin-right: auto;"
-                    onchange="loadPDF(this.value, event)">
-                <option selected>Lesson {{ lesson_number }}</option>
-                {% for topic_data in topics %}
-                    <option value="{{ topic_data.url }}" 
-                        {% if topic_data.path == current_topic_path %}selected{% endif %}>
-                        {{ topic_data.name }}
-                    </option>
-                {% endfor %}
-            </select>
+            <select class="form-select" style="width: 90%; margin-left: auto; margin-right: auto;"
+                onchange="loadPDF(this.value, event)">
+            <option disabled selected hidden>Lesson {{ lesson_number }}</option>
+            {% for topic_data in topics %}
+                <option value="{{ topic_data.url }}"
+                    {% if topic_data.path == current_topic_path %}selected{% endif %}>
+                    {{ topic_data.name }}
+                </option>
+            {% endfor %}
+        </select>
+
         </div>
         </div>
     </main>
