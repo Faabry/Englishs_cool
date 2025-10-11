@@ -41,6 +41,11 @@
             <!-- Scrollable lessons list -->
             <li>
               <ul id="lessonList" class="list-unstyled mb-0" style="max-height: 160px; overflow-y: auto;">
+                <li>
+                  <a class="dropdown-item" href="{% url 'lessons_list' %}">
+                    Todas as Lessons
+                  </a>                  
+                </li>
                 {% for lesson in lessons %}
                 <li>
                   <a class="dropdown-item" href="{% url 'lesson_view' lesson_number=lesson %}">

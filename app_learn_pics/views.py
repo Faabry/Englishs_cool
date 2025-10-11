@@ -15,6 +15,9 @@ from django import forms
 from django.contrib.auth import login
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import User, Profile
+from django.shortcuts import render
+from django.contrib.staticfiles import finders
+import json
 
 @login_required
 def home(request):
@@ -394,10 +397,10 @@ def lesson_view(request, lesson_number, topic=None):
 
     # The list of topics to display in the sidebar
     topics_list = [
-        {'name': 'Lesson', 'url': f'/static/lessons/{lesson_number}.pdf', 'path': topic_map['lesson']},
-        {'name': 'Homework', 'url': f'/static/homeworks/{lesson_number}.pdf', 'path': topic_map['homework']},
-        {'name': 'Listening', 'url': f'/static/lessons/{lesson_number}.json', 'path': topic_map['listening']},
-        {'name': 'Vocabulary', 'url': f'/static/lessons/vocabulary/{lesson_number}.json', 'path': topic_map['vocab']}
+        {'name': 'Lesson', 'url': f'/static/lessons/{lesson_number}.pdf', 'path': topic_map['lesson']},       
+        {'name': 'Vocabulary', 'url': f'/static/lessons/vocabulary/{lesson_number}.json', 'path': topic_map['vocab']}, 
+        {'name': 'Homework', 'url': f'/static/homeworks/{lesson_number}.pdf', 'path': topic_map['homework']},    
+        {'name': 'Listening', 'url': f'/static/lessons/{lesson_number}.json', 'path': topic_map['listening']}  
         # {'name': 'Submit for Correction', 'url': f'/lessons/submit/{lesson_number}', 'path': 'submit'},
     ]
 
@@ -409,11 +412,42 @@ def lesson_view(request, lesson_number, topic=None):
     })
 
 
+# @login_required
+# def get_lessons_dir():
+#     path = finders.find('lessons')
+#     if not path:
+#         raise FileNotFoundError("Could not locate 'lessons' folder in staticfiles.")
+#     return path
+
+@login_required
 def lessons_list(request):
-    lessons_dir = os.path.join(settings.STATICFILES_DIRS[0], 'lessons')
-    lesson_files = [f for f in os.listdir(lessons_dir) if f.endswith('.pdf')]
-    lessons = sorted([os.path.splitext(f)[0] for f in lesson_files], key=lambda x: int(x))
-    return {'lessons': lessons}
+    lessons_dir = os.path.join(settings.BASE_DIR, 'app_learn_pics', 'static', 'lessons')
+
+    # Load metadata JSON (if it exists)
+     # Load metadata JSON if it exists
+    metadata_path = os.path.join(lessons_dir, 'lessons_metadata.json')
+    if os.path.exists(metadata_path):
+        with open(metadata_path, 'r', encoding='utf-8') as f:
+            metadata = json.load(f)
+    else:
+        metadata = {}
+
+    # Build list of lessons
+    lessons = []
+    for filename in os.listdir(lessons_dir):
+        if filename.endswith('.pdf'):
+            lesson_number = os.path.splitext(filename)[0]
+            lessons.append({
+                'number': lesson_number,
+                'title': metadata.get(lesson_number, {}).get('title', f'Lesson {lesson_number}'),
+                'description': metadata.get(lesson_number, {}).get('description', 'No description available.'),
+                'folder': metadata.get(lesson_number, {}).get('folder', 'cards/vocabulary.png'),
+            })
+
+    lessons.sort(key=lambda x: int(x['number']))
+
+    # ✅ pass the list to the template
+    return render(request, 'lessons/lessons_list.html', {'lessons': lessons})
 
 
 @login_required
