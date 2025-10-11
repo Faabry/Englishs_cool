@@ -77,12 +77,14 @@ img.img-card {
 </head>
 <body style="background-color: #e3f2fd;">
     {% include "game/navbar.html" %}
-    <main class="container text-center py-5">
+    <main class="container">
     {% block content %}
-<div class="container">
-    <span class="title">
-    <span style="color: #000;">Hang</span> <span style="color: #ff0000;">man</span>
-    </span>
+    <div class="container">
+        <div class="d-flex align-items-center mb-3">
+            <span class="title">
+                <span style="color: #000;">Hang</span> <span style="color: #ff0000;">Man</span>
+            </span>
+        </div>  
     <div class="game-description mb-4">
     <p class="lead text-secondary">
         Teste seu vocabulário com o clássico <strong>Jogo da Forca</strong>!  
@@ -90,9 +92,11 @@ img.img-card {
         Cada letra errada custa uma vida, então pense bem antes de tentar!  
         Será que você consegue descobrir a palavra antes que as vidas acabem?
     </p>
-</div>
-
-    <p><strong>Category:</strong> {{ category }}</p>
+    </div>
+    <hr>
+            <br>
+    <div class="container text-center">
+        <p><strong>Category:</strong> {{ category }}</p>
     <canvas id="hangmanCanvas" width="300" height="300"></canvas>
     <p class="mt-4 letter">{{ display_word }}</p>
     <p>Guessed letters: {{ guesses|join:", " }}</p>
@@ -108,8 +112,8 @@ img.img-card {
     {% else %}
     <a href="?new=1" class="btn btn-success">Play Again</a>
     {% endif %}
+    </div>
 </div>
-
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const canvas = document.getElementById('hangmanCanvas');
