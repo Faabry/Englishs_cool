@@ -19,6 +19,12 @@ html, body { height: 100%; }
 .img-logo {
     max-width: 6rem;
 }
+.lesson-card-img {
+    width: 100%;          /* Make it span the full card width */
+    height: 200px;        /* Fixed height for all images */
+    object-fit: cover;    /* Crop image to fit nicely without distortion */
+    object-position: center; /* Center the crop */
+}
 
 .btn-logout {
     font-size: 1rem;
@@ -94,6 +100,7 @@ html, body { height: 100%; }
     z-index: 2;
     transform: translateY(10px) scale(0.97);
     opacity: 0.9;
+    rotate: 10px;
 }
 
 .flashcard.out {

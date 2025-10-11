@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
+    path('lesson-list/', views.lessons_list, name='lessons_list'),
     path('accounts/profile/', views.profile_view, name='profile'),
     # path('signup/', views.signup, name='signup'),
     path('verify_email/', views.verify_email, name='verify_email'),
@@ -20,9 +21,8 @@ urlpatterns = [
     path('hangman/', views.hangman, name='hangman'),        
     path('<str:category>/', views.show_random_image, name='show_image'),
     path('accounts/signup/', views.signup, name='signup'),
-    path('accounts/logged-out/', views.custom_logout, name='logged_out'),    
-    # path('lessons/<int:lesson_number>/', views.lesson_view, name='lesson_view'),        
+    path('accounts/logged-out/', views.custom_logout, name='logged_out'),        
     path('lessons/<int:lesson_number>/<str:topic>/', views.lesson_view, name='lesson_topic_view'),
     path('lessons/<int:lesson_number>/', views.lesson_view, name='lesson_view'),            
-    path('lessons/<int:lesson_number>/submit/', views.submit_lesson, name='submit_lesson'),        
+    path('lessons/<int:lesson_number>/submit/', views.submit_lesson, name='submit_lesson'),            
 ]

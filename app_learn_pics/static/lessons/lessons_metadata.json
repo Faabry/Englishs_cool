@@ -1,0 +1,52 @@
+{
+  "1": {
+    "title": "To drink - To eat",
+    "description": "Aprenda como se expressar dentro do contexto de comidas e bebidas, falando sobre o que você gosta de comer e beber.",
+    "folder": "cards/ocean.png"
+  },
+  "2": {
+    "title": "To speak - To study",
+    "description": "Aprenda a falar sobre idiomas, expressando o que você fala e o que está estudando.",
+    "folder": "cards/paris.png"
+  },
+  "3": {
+    "title": "To work - To play",
+    "description": "Descubra como falar sobre trabalho e lazer, equilibrando o 'to work' e o 'to play' em diferentes contextos.",
+    "folder": "cards/rocks.png"
+  },
+  "4": {
+    "title": "Review what you've learned",
+    "description": "Revise os verbos e expressões aprendidos até agora e pratique o que você já domina em situações reais.",
+    "folder": "cards/forest.png"
+  },
+  "5": {
+    "title": "To like - To sleep",
+    "description": "Aprenda a expressar gostos e preferências e a falar sobre sua rotina de sono com naturalidade.",
+    "folder": "cards/sky.png"
+  },
+  "6": {
+    "title": "Review what you've learned",
+    "description": "Consolide o que aprendeu nas últimas lições com atividades práticas e desafios de revisão.",
+    "folder": "cards/machupicchu.png"
+  },
+  "7": {
+    "title": "To want - To go",
+    "description": "Aprenda a falar sobre desejos e planos usando os verbos 'to want' e 'to go' de forma clara e correta.",
+    "folder": "cards/catarata.png"
+  },
+  "8": {
+    "title": "Review what you've learned",
+    "description": "Reforce seu aprendizado revisando expressões importantes e praticando conversas do dia a dia.",
+    "folder": "cards/idk.png"
+  },
+  "9": {
+    "title": "To have - To understand",
+    "description": "Entenda como usar 'to have' e 'to understand' para falar sobre posse, conhecimento e compreensão.",
+    "folder": "cards/mountain.png"
+  },
+  "10": {
+    "title": "Review what you've learned",
+    "description": "Finalize este módulo revisando todos os verbos e expressões estudados com atividades completas e dinâmicas.",
+    "folder": "cards/ny.png"
+  }
+}
